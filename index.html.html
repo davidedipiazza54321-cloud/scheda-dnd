@@ -1,0 +1,2883 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Scheda D&amp;D">
+<meta name="theme-color" content="#1e1b18">
+<meta name="description" content="Scheda D&D 5e mobile-first, modificabile e sincronizzabile.">
+<title>Scheda D&amp;D 5e · Personaggio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4efe6; --card:#faf7f2; --ink:#2b2623; --line:#2b2623;
+  --header:#1e1b18; --header-fg:#f4efe6; --gold:#b8860b; --gold-soft:#efe2c2;
+  --crimson:#8b1e1e; --crimson-soft:#f3dede; --muted:#6b6258; --input:#fffdf8;
+  --green:#2f6b46; --green-soft:#e2efe6;
+  --serif:"Cinzel",Georgia,"Times New Roman",serif;
+  --sans:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --shadow:3px 3px 0 rgba(43,38,35,.16);
+  --radius:5px; --nav-h:64px;
+  color-scheme:light;
+}
+:root[data-theme="dark"]{
+  --bg:#121110; --card:#1c1a17; --ink:#e8e2d5; --line:#c59b27;
+  --header:#28241e; --header-fg:#e8e2d5; --gold:#c59b27; --gold-soft:#4a3a12;
+  --crimson:#d05a5a; --crimson-soft:#3a1d1d; --muted:#a49b8c; --input:#24211c;
+  --green:#7fc79c; --green-soft:#1e3327;
+  --shadow:3px 3px 0 rgba(0,0,0,.5);
+  color-scheme:dark;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#121110; --card:#1c1a17; --ink:#e8e2d5; --line:#c59b27;
+    --header:#28241e; --header-fg:#e8e2d5; --gold:#c59b27; --gold-soft:#4a3a12;
+    --crimson:#d05a5a; --crimson-soft:#3a1d1d; --muted:#a49b8c; --input:#24211c;
+    --green:#7fc79c; --green-soft:#1e3327;
+    --shadow:3px 3px 0 rgba(0,0,0,.5);
+    color-scheme:dark;
+  }
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; font-family:var(--sans); font-size:15px; line-height:1.45;
+  color:var(--ink); background:var(--bg); overflow-x:hidden;
+  background-image:
+    radial-gradient(circle at 18% 12%,rgba(184,134,11,.07),transparent 45%),
+    radial-gradient(circle at 82% 78%,rgba(139,30,30,.055),transparent 50%);
+  background-attachment:fixed;
+}
+body::after{
+  content:""; position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.35;
+  background-image:repeating-linear-gradient(0deg,rgba(43,38,35,.028) 0 1px,transparent 1px 4px);
+  mix-blend-mode:multiply;
+}
+:root[data-theme="dark"] body::after{opacity:.18;mix-blend-mode:screen}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+a{color:var(--crimson)}
+h1,h2,h3,h4{font-family:var(--serif);letter-spacing:.04em;margin:0}
+[hidden]{display:none!important}
+.num{font-variant-numeric:tabular-nums}
+
+/* ---------- topbar ---------- */
+.topbar{
+  position:sticky; top:0; z-index:40;
+  background:linear-gradient(180deg,var(--header),color-mix(in srgb,var(--header) 88%,#000));
+  color:var(--header-fg);
+  border-bottom:2px solid var(--gold);
+  padding:calc(7px + env(safe-area-inset-top,0px)) 12px 7px;
+  display:flex; align-items:center; gap:10px;
+  box-shadow:0 4px 14px rgba(0,0,0,.22);
+}
+.brand{display:flex;align-items:center;gap:9px;min-width:0;flex:1 1 auto}
+.brand .crest{
+  width:38px;height:42px;flex:0 0 auto;display:grid;place-items:center;
+  border:1.5px solid var(--gold);border-radius:3px 3px 14px 14px;
+  background:radial-gradient(circle at 50% 30%,rgba(197,155,39,.3),rgba(0,0,0,.25));
+  font-family:var(--serif);font-weight:700;color:var(--gold);font-size:19px;
+}
+.brand .who{min-width:0;flex:1 1 auto;display:flex;flex-direction:column;gap:1px}
+.top-input-title{
+  width:100%;max-width:42vw;height:auto;padding:1px 3px;margin-left:-3px;
+  background:transparent;border:1px solid transparent;border-radius:3px;
+  color:var(--header-fg);font-family:var(--serif);font-size:15px;font-weight:700;line-height:1.15;
+  text-overflow:ellipsis;
+}
+.top-input-title::placeholder{color:color-mix(in srgb,var(--header-fg) 55%,transparent);opacity:1}
+.top-input-title:hover{border-color:rgba(197,155,39,.4)}
+.top-input-title:focus{outline:none;border-color:var(--gold);background:rgba(0,0,0,.2);box-shadow:none}
+.sub-line{display:flex;align-items:center;gap:2px;min-width:0;max-width:48vw}
+.sub-line .liv-lab{font-size:9.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#cbbfa9;flex:0 0 auto}
+.top-input-sub{
+  height:auto;min-width:0;padding:0 2px;background:transparent;
+  border:1px solid transparent;border-radius:3px;
+  color:#cbbfa9;font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  text-overflow:ellipsis;
+}
+.top-input-sub::placeholder{color:color-mix(in srgb,#cbbfa9 65%,transparent);opacity:1}
+.top-input-sub:hover{border-color:rgba(197,155,39,.4)}
+.top-input-sub:focus{outline:none;border-color:var(--gold);background:rgba(0,0,0,.2);box-shadow:none}
+#top-livello{width:34px;flex:0 0 auto;text-align:center;letter-spacing:.02em}
+#top-classe{flex:1 1 auto;width:auto}
+:root[data-theme="dark"] .brand .sub,:root[data-theme="dark"] .top-input-sub{color:var(--muted)}
+.topbar-actions{display:flex;align-items:center;gap:5px;flex:0 0 auto}
+.iconbtn{
+  width:34px;height:34px;display:grid;place-items:center;
+  background:rgba(255,255,255,.06);color:var(--header-fg);
+  border:1px solid rgba(197,155,39,.55);border-radius:4px;padding:0;
+  transition:background .15s,transform .1s;
+}
+.iconbtn:hover{background:rgba(197,155,39,.22)}
+.iconbtn:active{transform:translateY(1px)}
+.iconbtn svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.iconbtn.wide{width:auto;padding:0 8px;gap:5px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.iconbtn.wide span{display:none}
+@media(min-width:760px){.iconbtn.wide span{display:inline}}
+.sync-status{
+  display:flex;align-items:center;gap:5px;font-size:10px;font-weight:700;
+  padding:5px 8px;border-radius:20px;border:1px solid rgba(197,155,39,.5);
+  background:rgba(0,0,0,.18);color:#d8cfbd;white-space:nowrap;
+}
+.sync-status .dot{width:7px;height:7px;border-radius:50%;background:#8a8578;flex:0 0 auto}
+.sync-status[data-state="saving"] .dot{background:#e0b23a;animation:pulse 1s infinite}
+.sync-status[data-state="ok"] .dot{background:#63c98a}
+.sync-status[data-state="off"] .dot{background:#d05a5a}
+@keyframes pulse{50%{opacity:.25}}
+@media(max-width:520px){.sync-status .txt{display:inline;max-width:58px;overflow:hidden;text-overflow:ellipsis}.sync-status{padding:6px}}
+
+/* ---------- main nav ---------- */
+.mainnav{
+  position:sticky; top:calc(56px + env(safe-area-inset-top,0px)); z-index:35;
+  display:flex; gap:4px; padding:6px 10px; overflow-x:auto;
+  background:color-mix(in srgb,var(--bg) 92%,#000 8%);
+  border-bottom:1px solid var(--line);
+  scrollbar-width:none;
+}
+.mainnav::-webkit-scrollbar{display:none}
+.tabbtn{
+  flex:1 1 auto; display:flex; align-items:center; justify-content:center; gap:6px;
+  padding:8px 12px; border:1px solid transparent; border-radius:4px;
+  background:transparent; color:var(--muted); font-size:11.5px; font-weight:800;
+  letter-spacing:.05em; text-transform:uppercase; white-space:nowrap;
+}
+.tabbtn svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.tabbtn.active{background:var(--header);color:var(--gold);border-color:var(--line);box-shadow:var(--shadow)}
+@media(max-width:900px){.tabbtn{padding:8px 9px;font-size:10.5px}}
+</style>
+
+<style>
+/* ---------- layout ---------- */
+main{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:12px 12px calc(24px + env(safe-area-inset-bottom,0px))}
+.tab-panel{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:12px;animation:fade .18s ease}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}}
+.card{
+  grid-column:1/-1; min-width:0; background:var(--card);
+  border:1.5px solid var(--line); border-radius:var(--radius);
+  box-shadow:var(--shadow); overflow:hidden;
+}
+.card>h2{
+  background:var(--header); color:var(--header-fg); font-size:12px; font-weight:700;
+  text-transform:uppercase; letter-spacing:.16em; padding:8px 12px;
+  display:flex; align-items:center; justify-content:space-between; gap:8px;
+  border-bottom:2px solid var(--gold);
+}
+.card>h2 .count{font-family:var(--sans);font-size:10px;color:var(--gold);letter-spacing:.05em}
+.card-body{padding:12px}
+.col-7{grid-column:span 7}.col-5{grid-column:span 5}
+.col-8{grid-column:span 8}.col-4{grid-column:span 4}
+.col-6{grid-column:span 6}.col-12{grid-column:1/-1}
+@media(max-width:860px){.col-7,.col-5,.col-8,.col-4,.col-6{grid-column:1/-1}}
+
+/* ---------- generic fields ---------- */
+label.fld{display:flex;flex-direction:column;justify-content:space-between;gap:4px;min-width:0;height:100%}
+label.fld>span, .flabel{
+  font-size:10px;line-height:1.2;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+input:where(:not([type=checkbox]):not([type=radio]):not([type=file])), select, textarea{
+  width:100%;min-width:0;height:36px;padding:6px 10px;font-size:14px;border-radius:4px;
+  background:var(--input);border:1px solid color-mix(in srgb,var(--line) 70%,transparent);
+  outline:none;transition:border-color .15s,box-shadow .15s;
+}
+input:focus,select:focus,textarea:focus{border-color:var(--gold);box-shadow:0 0 0 2px color-mix(in srgb,var(--gold) 25%,transparent)}
+textarea{height:auto;resize:vertical;min-height:34px;line-height:1.4}
+input[type=checkbox]{accent-color:var(--crimson);width:15px;height:15px;margin:0;flex:0 0 auto}
+.field-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:9px}
+.field-grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.field-grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media(max-width:480px){.field-grid.three{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.hint{font-size:10.5px;color:var(--muted);line-height:1.35}
+.divider{height:1px;background:color-mix(in srgb,var(--line) 35%,transparent);margin:10px 0}
+.pill{
+  display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:800;
+  text-transform:uppercase;letter-spacing:.05em;padding:2px 7px;border-radius:20px;
+  border:1px solid var(--line);background:var(--gold-soft);color:var(--ink);
+}
+.pill.gold{border-color:var(--gold);color:var(--gold);background:transparent}
+.pill.red{border-color:var(--crimson);color:var(--crimson);background:var(--crimson-soft)}
+.pill.green{border-color:var(--green);color:var(--green);background:var(--green-soft)}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  padding:8px 12px;border:1.5px solid var(--line);border-radius:4px;
+  background:var(--card);color:var(--ink);font-size:11.5px;font-weight:800;
+  letter-spacing:.05em;text-transform:uppercase;box-shadow:2px 2px 0 rgba(43,38,35,.12);
+}
+.btn:hover{background:var(--gold-soft)}
+.btn:active{transform:translateY(1px);box-shadow:none}
+.btn.primary{background:var(--header);color:var(--gold);border-color:var(--gold)}
+.btn.danger{background:var(--crimson-soft);color:var(--crimson);border-color:var(--crimson)}
+.btn.small{padding:5px 8px;font-size:10px}
+.btn-row{display:flex;flex-wrap:wrap;gap:7px}
+
+/* ---------- buffs ---------- */
+.buff-wrap{display:flex;flex-wrap:wrap;gap:6px}
+.buff{
+  display:inline-flex;align-items:center;gap:5px;padding:4px 9px 4px 7px;
+  border:1px solid color-mix(in srgb,var(--line) 55%,transparent);border-radius:20px;
+  background:var(--input);font-size:11.5px;font-weight:700;line-height:1.25;max-width:100%;
+}
+.buff .dot{width:8px;height:8px;border-radius:50%;border:1.5px solid var(--muted);flex:0 0 auto}
+.buff.on{border-color:var(--gold);background:var(--gold-soft);color:var(--ink);box-shadow:0 0 0 1px color-mix(in srgb,var(--gold) 30%,transparent)}
+.buff.on .dot{background:var(--gold);border-color:var(--gold)}
+.buff .x{border:0;background:none;color:var(--muted);font-size:13px;line-height:1;padding:0 0 0 2px}
+.buff-add{border-style:dashed;background:transparent;color:var(--muted);font-weight:800}
+
+/* ---------- combat stats ---------- */
+.combat-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+@media(max-width:640px){.combat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.statframe{
+  position:relative;display:flex;flex-direction:column;align-items:center;justify-content:space-between;
+  text-align:center;padding:10px 8px;min-height:120px;
+  background:var(--input);border:2px solid var(--line);border-radius:6px;
+}
+.statframe .cap{font-size:9px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:var(--muted)}
+.statframe .big,.statframe input.big-input{font-family:var(--serif);font-size:34px;font-weight:700;line-height:1.1;margin:2px 0 1px}
+.statframe input.big-input{
+  width:100%;height:auto;padding:1px 0;text-align:center;color:inherit;
+  border:1px solid transparent;border-radius:5px;background:transparent;
+}
+.statframe input.big-input::placeholder{color:inherit;opacity:.4}
+.statframe input.big-input:hover{border-color:color-mix(in srgb,var(--line) 45%,transparent)}
+.statframe input.big-input:focus{outline:none;border-color:var(--gold);background:color-mix(in srgb,var(--input) 70%,transparent);box-shadow:none}
+.statframe input.big-input.overridden{font-weight:800}
+.statframe .formula{font-size:9.5px;color:var(--muted);letter-spacing:.02em}
+.statframe .sub{font-size:10px;color:var(--muted)}
+.auto-badge{
+  font-size:8px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;line-height:1.5;
+  padding:1px 7px;margin-top:2px;border-radius:10px;cursor:pointer;
+  color:var(--muted);background:transparent;border:1px solid color-mix(in srgb,var(--line) 50%,transparent);
+}
+.auto-badge:hover{color:var(--ink);background:var(--gold-soft);border-color:var(--gold)}
+.shieldframe .auto-badge{color:var(--gold);border-color:color-mix(in srgb,var(--gold) 55%,transparent)}
+.statframe input.sub-input{
+  width:100%;height:26px;padding:2px 5px;text-align:center;font-size:10px;color:var(--muted);
+  border:1px dashed transparent;border-radius:4px;background:transparent;
+}
+.statframe input.sub-input::placeholder{color:var(--muted);opacity:.75}
+.statframe input.sub-input:hover{border-color:color-mix(in srgb,var(--line) 45%,transparent)}
+.statframe input.sub-input:focus{outline:none;border-color:var(--gold);background:var(--input);color:var(--ink)}
+.shieldframe{
+  background:var(--header);color:var(--header-fg);border:2px solid var(--gold);
+  border-radius:6px 6px 28px 28px;padding:10px 8px 12px;min-height:124px;
+}
+.shieldframe .cap{color:var(--gold)}
+.shieldframe .formula{color:#cbbfa9}
+.shieldframe .big,.shieldframe input.big-input{font-size:38px;color:#fff}
+:root[data-theme="dark"] .shieldframe .big,:root[data-theme="dark"] .shieldframe input.big-input{color:var(--gold)}
+.hexframe{padding:10px 10px}
+#c-vel{width:100%;height:34px;font-size:26px;font-weight:700;text-align:center;border:0;background:transparent;padding:0;margin:2px 0}
+.statframe input.override{
+  width:68px;height:24px;text-align:center;font-size:11px;padding:2px 4px;border-radius:3px;margin-top:3px;
+  background:transparent;border:1px dashed color-mix(in srgb,var(--line) 45%,transparent);
+}
+</style>
+
+<style>
+/* ---------- HP ---------- */
+.hp-top{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:6px}
+.hp-nums{font-family:var(--serif);font-size:26px;font-weight:700;line-height:1}
+.hp-nums small{font-family:var(--sans);font-size:11px;color:var(--muted);font-weight:600}
+.hpbar{height:16px;border:1.5px solid var(--line);background:var(--input);border-radius:3px;overflow:hidden;position:relative}
+.hpbar>i{display:block;height:100%;background:linear-gradient(90deg,var(--crimson),#c05050);transition:width .25s}
+.hpbar.temp>i{background:linear-gradient(90deg,#3d6fa8,#6f9cc9)}
+.hpbar .lbl{position:absolute;inset:0;display:grid;place-items:center;font-size:9px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.6)}
+.hp-controls{display:grid;grid-template-columns:1fr auto auto;gap:6px;margin-top:9px}
+.hp-controls input{text-align:center}
+.hp-quick{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
+.hp-quick .btn{padding:5px 8px;font-size:10px}
+.hp-mini{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}
+.hp-mini label.fld input{text-align:center;font-family:var(--serif);font-weight:700;font-size:17px}
+.hitdice{display:flex;flex-wrap:wrap;gap:4px;align-items:center;margin-top:7px}
+.hd-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.hd-inputs{display:flex;align-items:center;gap:3px}
+.hd-inputs input{width:52px;height:30px;padding:2px 5px;text-align:center;font-size:12px}
+.hd-inputs select{width:auto;min-width:58px;height:30px;padding:2px 5px;font-size:12px}
+.hd-inputs .hd-d{font-size:12px;font-weight:800;color:var(--muted)}
+.die{
+  width:22px;height:22px;display:grid;place-items:center;border:1.5px solid var(--line);
+  border-radius:3px;background:var(--gold-soft);font-size:10px;font-weight:800;color:var(--ink);
+}
+.die.used{background:var(--input);color:var(--muted);text-decoration:line-through;opacity:.55}
+
+/* ---------- abilities ---------- */
+.ability-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;align-items:start}
+@media(max-width:1100px){.ability-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){.ability-grid{grid-template-columns:1fr}}
+.ability{border:1.5px solid var(--line);background:var(--card);box-shadow:var(--shadow);border-radius:4px;overflow:hidden}
+.ability .ab-head{
+  background:var(--header);color:var(--header-fg);border-bottom:2px solid var(--gold);
+  font-family:var(--serif);font-size:11.5px;font-weight:700;letter-spacing:.15em;
+  text-transform:uppercase;padding:5px 10px;display:flex;justify-content:space-between;align-items:center;
+}
+.ability .ab-head em{font-family:var(--sans);font-style:normal;font-size:9px;letter-spacing:.08em;color:var(--gold)}
+.ab-body{display:flex;gap:10px;padding:10px;align-items:flex-start}
+.ab-left{flex:0 0 66px;display:flex;flex-direction:column;align-items:center;gap:4px}
+.scorebox{
+  width:64px;height:60px;display:grid;place-items:center;border:1.5px solid var(--line);
+  border-radius:4px 4px 2px 2px;background:var(--input);
+}
+.scorebox input{
+  width:100%;height:100%;border:0;background:transparent;text-align:center;
+  font-family:var(--serif);font-size:28px;font-weight:700;padding:0;
+}
+.modoval{
+  width:58px;height:32px;border:1.5px solid var(--line);border-radius:50%;
+  display:grid;place-items:center;background:var(--gold-soft);
+  font-family:var(--serif);font-size:17px;font-weight:700;
+}
+.ab-right{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:0}
+.srow{display:flex;flex-wrap:wrap;align-items:center;gap:3px;padding:3px 0;min-height:28px;border-bottom:1px dotted color-mix(in srgb,var(--line) 25%,transparent)}
+.srow:last-child{border-bottom:0}
+.srow .sname{flex:1 1 0;display:flex;align-items:center;gap:3px;min-width:0;font-size:12.5px;font-weight:600;line-height:1.2}
+.srow .sname-txt{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.srow .sname .svant{display:inline-block;flex:0 0 auto;font-size:8px;font-weight:800;padding:1px 4px;border-radius:3px;background:var(--crimson-soft);color:var(--crimson);border:1px solid var(--crimson);letter-spacing:.03em}
+.srow .sname .wisbadge{display:inline-block;flex:0 0 auto;font-size:8px;font-weight:800;padding:1px 4px;border-radius:3px;background:var(--gold-soft);color:var(--ink);border:1px solid var(--gold);letter-spacing:.03em}
+.srow .sval{
+  font-family:var(--serif);font-size:15px;font-weight:700;min-width:28px;text-align:right;margin-left:auto;
+  padding:0 3px;border-radius:3px;cursor:pointer;
+}
+.srow .sval:hover{background:var(--gold-soft);color:var(--ink)}
+.srow .sval:focus-visible{outline:1px solid var(--gold)}
+.srow-opts{flex:0 0 100%;display:flex;align-items:center;gap:4px;padding:2px 0 3px}
+.tog{
+  border:1px solid color-mix(in srgb,var(--line) 45%,transparent);background:var(--input);
+  color:var(--muted);border-radius:3px;font-size:9px;font-weight:800;line-height:1;
+  padding:0;width:18px;height:18px;display:inline-grid;place-items:center;letter-spacing:.02em;flex:0 0 auto;
+}
+.tog.on{background:var(--header);color:var(--gold);border-color:var(--gold)}
+.tog.armor.on{background:var(--crimson);color:#fff;border-color:var(--crimson)}
+.tog.wis.on{background:var(--gold);color:#231c07;border-color:var(--gold)}
+.tog.wis{width:auto;padding:0 5px}
+.tog.gear{font-size:10px;color:var(--muted)}
+.tog.gear.open{background:var(--gold-soft);color:var(--ink);border-color:var(--gold)}
+.tog.extra{padding:0;border:0;background:transparent;width:auto}
+.tog.extra input{width:40px;height:18px;padding:0 3px;text-align:center;font-size:10px;border:1px dashed color-mix(in srgb,var(--line) 45%,transparent);background:var(--input);border-radius:3px}
+.save-row .sname{font-weight:800;text-transform:uppercase;font-size:10px;letter-spacing:.08em}
+
+/* ---------- dynamic entries ---------- */
+.entry{border:1px solid color-mix(in srgb,var(--line) 50%,transparent);border-radius:4px;margin-bottom:7px;background:var(--input);overflow:hidden}
+.entry.is-used{opacity:.62}
+.entry-head{display:flex;align-items:center;gap:5px;padding:5px 6px;flex-wrap:wrap}
+.entry-head input.f-name{flex:1 1 180px;min-width:140px;height:30px;font-size:13.5px;font-weight:700;border-color:transparent;background:transparent;padding:4px 5px}
+.entry-head input.f-name:hover,.entry-head input.f-name:focus{background:var(--card);border-color:var(--line)}
+.entry-head textarea.f-meta{flex:2 1 220px;min-height:30px;font-size:12px;padding:4px 5px;background:transparent;border-color:transparent}
+.entry-head textarea.f-meta:hover,.entry-head textarea.f-meta:focus{background:var(--card);border-color:var(--line)}
+.entry-head .icon-btn{width:24px;height:24px;background:transparent;color:var(--muted);border-color:transparent;font-size:15px}
+.entry-head .icon-btn:hover{background:var(--gold-soft);color:var(--ink)}
+.entry-head .icon-btn.del:hover{background:var(--crimson-soft);color:var(--crimson)}
+.entry-fields{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;padding:0 6px 7px}
+.entry-fields .mini{display:flex;flex-direction:column;gap:2px;min-width:0}
+.entry-fields .mini span{font-size:8.5px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.entry-fields .mini input{height:30px;font-size:12px;padding:3px 6px}
+.entry-desc{padding:0 8px 8px}
+.entry-desc textarea{min-height:64px;font-size:12.5px;background:var(--card)}
+.entry-res{display:flex;align-items:center;gap:5px;flex-wrap:wrap;padding:0 0 7px;font-size:10px;color:var(--muted)}
+.entry-res select{width:auto;height:28px;font-size:11px;padding:2px 6px}
+.entry-res input.num{width:48px;height:28px;text-align:center;padding:2px 3px;font-size:11px}
+.pips{display:flex;gap:3px;flex-wrap:wrap}
+.pips:empty{display:none}
+.pip{width:16px;height:16px;border:1.5px solid var(--line);border-radius:3px;background:var(--gold-soft);padding:0;font-size:0}
+.pip.used{background:var(--input);opacity:.5}
+.pip.avail:hover{box-shadow:0 0 0 2px color-mix(in srgb,var(--gold) 40%,transparent)}
+.prep-chip{
+  border:1px solid var(--line);border-radius:20px;background:var(--input);color:var(--muted);
+  font-size:9px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:3px 7px;
+}
+.prep-chip.on{background:var(--green-soft);border-color:var(--green);color:var(--green)}
+.add-row{
+  width:100%;border:1px dashed color-mix(in srgb,var(--line) 55%,transparent);
+  background:transparent;color:var(--muted);border-radius:4px;padding:7px;font-size:11px;
+  font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+}
+.add-row:hover{background:var(--gold-soft);color:var(--ink);border-color:var(--gold)}
+</style>
+
+<style>
+/* ---------- spells ---------- */
+.spell-toolbar{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px}
+.filters{display:flex;gap:5px;flex-wrap:wrap}
+.filters .btn{padding:5px 8px;font-size:9.5px;box-shadow:none}
+.filters .btn.active{background:var(--header);color:var(--gold);border-color:var(--gold)}
+.slot-row{display:grid;grid-template-columns:52px minmax(0,1fr) auto 44px;align-items:center;gap:8px;padding:5px 0;border-bottom:1px dotted color-mix(in srgb,var(--line) 25%,transparent)}
+.slot-row:last-child{border-bottom:0}
+.slot-row .lv{font-family:var(--serif);font-weight:700;font-size:13px}
+.slot-row .pips .pip{width:18px;height:18px}
+.slot-row .cnt{font-size:10px;color:var(--muted);white-space:nowrap}
+.spell{border:1px solid color-mix(in srgb,var(--line) 50%,transparent);border-radius:4px;margin-bottom:6px;background:var(--input);overflow:hidden}
+.spell-head{display:flex;align-items:center;gap:5px;padding:5px 6px;flex-wrap:wrap}
+.spell-head .sname{flex:1 1 140px;min-width:0;font-weight:700;font-size:13px;padding:3px 4px;border:1px solid transparent;background:transparent}
+.spell-head .sname:hover,.spell-head .sname:focus{background:var(--card);border-color:var(--line)}
+.badges{display:flex;gap:3px;flex-wrap:wrap;align-items:center}
+.badge{
+  font-size:8.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;
+  padding:2px 5px;border-radius:3px;border:1px solid color-mix(in srgb,var(--line) 45%,transparent);
+  background:var(--card);color:var(--muted);white-space:nowrap;
+}
+.badge.cast{background:var(--header);color:var(--gold);border-color:var(--gold)}
+.badge.conc{background:var(--crimson-soft);color:var(--crimson);border-color:var(--crimson)}
+.badge.rit{background:var(--green-soft);color:var(--green);border-color:var(--green)}
+.badge.range{background:var(--gold-soft);color:var(--ink);border-color:var(--gold)}
+.badge.dmg{background:#e7e1f3;color:#4b3670;border-color:#8a76b0}
+:root[data-theme="dark"] .badge.dmg{background:#2a2238;color:#c2b0e0;border-color:#8a76b0}
+.spell-body{padding:0 7px 7px}
+.spell-body textarea{min-height:70px;font-size:12.5px;background:var(--card)}
+.spell.used{opacity:.58}
+.spell.hide{display:none}
+.spell-meta-line{font-size:9.5px;color:var(--muted);padding:0 5px 3px}
+
+/* ---------- equipment ---------- */
+.inv-head{
+  display:grid;grid-template-columns:minmax(0,1fr) 96px 46px 60px 26px 26px;gap:5px;
+  padding:0 6px 5px;font-size:8.5px;font-weight:800;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--muted);
+}
+.inv-row{border:1px solid color-mix(in srgb,var(--line) 45%,transparent);border-radius:4px;background:var(--input);margin-bottom:7px;overflow:hidden}
+.inv-main{display:grid;grid-template-columns:minmax(0,1fr) 96px 46px 60px 26px 26px;gap:5px;align-items:center;padding:5px 6px}
+.inv-main input,.inv-main select{font-size:11.5px;padding:4px 5px;height:34px}
+.inv-main .nm{font-weight:700}
+.inv-desc{padding:0 6px 6px}
+.inv-desc textarea{min-height:42px;font-size:12px;background:var(--card)}
+.icon-btn{border:1px solid transparent;background:transparent;color:var(--muted);border-radius:3px;display:grid;place-items:center;font-size:14px;line-height:1;padding:0}
+.icon-btn:hover{background:var(--gold-soft);color:var(--ink)}
+@media(max-width:600px){
+  .inv-head{display:grid;grid-template-columns:96px minmax(0,1fr) minmax(0,1fr) 28px 28px;grid-template-areas:"hd hd hd hd hd" "pos qty wt a b";row-gap:2px}
+  .inv-head span:nth-child(1){grid-area:hd}
+  .inv-head span:nth-child(2){grid-area:pos}
+  .inv-head span:nth-child(3){grid-area:qty}
+  .inv-head span:nth-child(4){grid-area:wt}
+  .inv-head span:nth-child(5),.inv-head span:nth-child(6){display:none}
+  .inv-main{grid-template-columns:96px minmax(0,1fr) minmax(0,1fr) 28px 28px;grid-template-areas:"nm nm nm nm nm" "pos qty wt tog del"}
+  .inv-main .nm{grid-area:nm}.inv-main .pos{grid-area:pos}.inv-main .qty{grid-area:qty}.inv-main .wt{grid-area:wt}
+  .inv-main .inv-toggle{grid-area:tog;justify-self:end}
+  .inv-main .del{grid-area:del;justify-self:end}
+  .inv-main input,.inv-main select{font-size:16px;height:38px}
+}
+.totals{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin-top:10px}
+.total-box{border:1px solid color-mix(in srgb,var(--line) 45%,transparent);border-radius:4px;padding:7px 8px;background:var(--input)}
+.total-box .k{font-size:9px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.total-box .v{font-family:var(--serif);font-size:17px;font-weight:700}
+.total-box .total-input{
+  flex:1 1 auto;width:100%;min-width:0;height:auto;min-height:20px;padding:0;
+  border:0;border-radius:3px;background:transparent;color:var(--ink);
+  font-family:var(--serif);font-size:17px;font-weight:700;
+}
+.total-box .total-input::placeholder{color:var(--muted);opacity:.8}
+.total-box .total-input:hover{background:var(--card)}
+.total-box .total-input:focus{outline:none;background:var(--card);box-shadow:0 0 0 1px var(--gold)}
+.total-box.over{border-color:var(--crimson);background:var(--crimson-soft)}
+.total-box.over .v{color:var(--crimson)}
+.spell-toolbar .total-box,.field-grid .total-box{
+  min-height:36px;padding:4px 10px;display:flex;align-items:baseline;justify-content:space-between;gap:6px;
+}
+.spell-toolbar .total-box .k,.field-grid .total-box .k{font-size:8.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.warnbox{margin-top:9px;border-left:4px solid var(--crimson);background:var(--crimson-soft);padding:7px 9px;font-size:11px;border-radius:0 4px 4px 0}
+.warnbox.ok{border-color:var(--green);background:var(--green-soft)}
+.coin-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+@media(max-width:480px){.coin-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.coin-grid label.fld input{text-align:center}
+.coin-total{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-top:9px;padding-top:8px;border-top:1px solid color-mix(in srgb,var(--line) 30%,transparent)}
+.coin-total b{font-family:var(--serif);font-size:20px;color:var(--gold)}
+.loan-row{display:grid;grid-template-columns:1.2fr .8fr 1fr 26px;gap:5px;margin-bottom:5px}
+.loan-row input{font-size:11.5px;padding:4px 5px}
+
+/* ---------- notes / portrait ---------- */
+.portrait-wrap{display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap}
+.portrait-frame{
+  width:120px;height:150px;flex:0 0 auto;border:2px solid var(--line);border-radius:4px;
+  background:var(--input);display:grid;place-items:center;overflow:hidden;box-shadow:var(--shadow);
+}
+.portrait-frame img{width:100%;height:100%;object-fit:cover}
+.portrait-frame .ph{font-family:var(--serif);font-size:34px;color:var(--gold);opacity:.7}
+.portrait-tools{flex:1 1 190px;min-width:0;display:flex;flex-direction:column;gap:6px}
+.prof-chips{display:flex;flex-wrap:wrap;gap:5px}
+.chip-toggle{border:1px solid color-mix(in srgb,var(--line) 50%,transparent);background:var(--input);border-radius:20px;padding:3px 9px;font-size:10.5px;font-weight:700;color:var(--muted)}
+.chip-toggle.on{background:var(--header);color:var(--gold);border-color:var(--gold)}
+
+/* ---------- modal ---------- */
+.modal-backdrop{
+  position:fixed;inset:0;z-index:90;background:rgba(20,17,14,.62);backdrop-filter:blur(3px);
+  display:flex;align-items:flex-end;justify-content:center;padding:0;
+}
+@media(min-width:640px){.modal-backdrop{align-items:center;padding:20px}}
+.modal{
+  width:100%;max-width:520px;max-height:90vh;overflow:auto;background:var(--card);
+  border:1.5px solid var(--gold);border-radius:10px 10px 0 0;box-shadow:0 -8px 40px rgba(0,0,0,.4);
+}
+@media(min-width:640px){.modal{border-radius:6px}}
+.modal>h2{background:var(--header);color:var(--gold);font-size:12px;letter-spacing:.16em;text-transform:uppercase;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid var(--gold)}
+.modal>h2 button{background:none;border:0;color:var(--header-fg);font-size:20px;line-height:1;padding:0 4px}
+.modal-body{padding:12px;display:flex;flex-direction:column;gap:10px}
+.modal-section{border:1px solid color-mix(in srgb,var(--line) 40%,transparent);border-radius:5px;padding:9px}
+.modal-section h3{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:7px}
+.modal-section .hint{margin-top:6px}
+.cloud-state{font-size:11px;padding:6px 8px;border-radius:4px;background:var(--input);border:1px solid color-mix(in srgb,var(--line) 35%,transparent)}
+
+/* ---------- bottom nav ---------- */
+.bottomnav{display:none}
+@media(max-width:640px){
+  .mainnav{display:none}
+  main{padding:9px 8px calc(var(--nav-h) + 22px + env(safe-area-inset-bottom,0px))}
+  .bottomnav{
+    display:grid;grid-template-columns:repeat(4,1fr);position:fixed;left:0;right:0;bottom:0;z-index:60;
+    background:var(--header);border-top:2px solid var(--gold);
+    padding:4px 2px calc(4px + env(safe-area-inset-bottom,0px));
+    box-shadow:0 -6px 24px rgba(0,0,0,.3);
+  }
+  .bottomnav .tabbtn{flex-direction:column;gap:2px;padding:5px 1px;font-size:8.5px;letter-spacing:.02em;color:#a99e8a;border:0;border-radius:6px}
+  .bottomnav .tabbtn svg{width:19px;height:19px}
+  .bottomnav .tabbtn span{display:block;white-space:normal;line-height:1.05;text-align:center}
+  .bottomnav .tabbtn.active{background:rgba(197,155,39,.14);color:var(--gold);box-shadow:none}
+  .topbar{padding-left:8px;padding-right:8px;gap:6px}
+  .top-input-title{font-size:16px;max-width:46vw}
+  .sub-line{max-width:50vw}
+  .top-input-sub{font-size:16px}
+  #top-livello{width:40px}
+  .statframe input.sub-input{font-size:16px;height:30px}
+  .brand .crest{width:32px;height:36px;font-size:16px}
+  .topbar-actions{gap:3px}
+  .iconbtn{width:31px;height:31px}
+  .iconbtn svg{width:15px;height:15px}
+  .card-body{padding:9px}
+  .ab-body{padding:8px}
+  .statframe .big,.statframe input.big-input{font-size:29px}
+  .shieldframe .big,.shieldframe input.big-input{font-size:33px}
+  .hd-inputs input,.hd-inputs select{font-size:16px;height:34px}
+  .hp-nums{font-size:23px}
+}
+@media(max-width:360px){
+  .brand .crest{display:none}
+  .top-input-title{max-width:44vw}
+  .statframe .big,.statframe input.big-input{font-size:26px}
+  .iconbtn.wide{display:none}
+}
+
+/* ---------- toast ---------- */
+#toast{
+  position:fixed;left:50%;bottom:calc(var(--nav-h) + 16px + env(safe-area-inset-bottom,0px));
+  transform:translate(-50%,20px);z-index:120;opacity:0;pointer-events:none;
+  background:var(--header);color:var(--header-fg);border:1px solid var(--gold);
+  padding:8px 14px;border-radius:20px;font-size:11.5px;font-weight:700;letter-spacing:.03em;
+  box-shadow:0 6px 24px rgba(0,0,0,.35);transition:opacity .2s,transform .2s;max-width:90vw;text-align:center;
+}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+@media(min-width:641px){#toast{bottom:20px}}
+@media(max-width:640px){
+  input:where(:not([type=checkbox]):not([type=radio]):not([type=file])),select,textarea{font-size:16px}
+  .entry-head input.f-name,.entry-head textarea.f-meta{font-size:16px}
+  .entry-res select,.entry-res input.num{font-size:16px;height:34px}
+  .entry-fields .mini input{font-size:16px;height:34px}
+  .tog.extra input{font-size:16px;width:52px;height:22px}
+  .inv-main input,.inv-main select{font-size:16px}
+}
+@media print{.topbar,.mainnav,.bottomnav,#toast,.modal-backdrop{display:none!important}main{padding:0}.card{box-shadow:none;break-inside:avoid}}
+</style>
+</head>
+
+<body>
+<header class="topbar">
+  <div class="brand">
+    <div class="crest" id="top-crest">?</div>
+    <div class="who">
+      <input type="text" id="top-nome" class="top-input-title" placeholder="Nome Personaggio" autocomplete="off" aria-label="Nome personaggio">
+      <div class="sub-line">
+        <span class="liv-lab">Liv.</span>
+        <input type="number" id="top-livello" class="top-input-sub" min="1" max="20" placeholder="—" aria-label="Livello">
+        <input type="text" id="top-classe" class="top-input-sub" placeholder="Classe e sottoclasse" autocomplete="off" aria-label="Classe e sottoclasse">
+      </div>
+    </div>
+  </div>
+  <div class="topbar-actions">
+    <button class="sync-status" id="btn-cloud" data-state="off" title="Sincronizzazione cloud">
+      <span class="dot"></span><span class="txt" id="sync-txt">Locale</span>
+    </button>
+    <button class="iconbtn wide" id="btn-shortrest" title="Riposo breve" aria-label="Riposo breve">☀<span>Rip. breve</span></button>
+    <button class="iconbtn wide" id="btn-longrest" title="Riposo lungo" aria-label="Riposo lungo">☾<span>Rip. lungo</span></button>
+    <button class="iconbtn" id="btn-settings" title="Impostazioni, cloud e backup" aria-label="Impostazioni">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.55V21a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1.11-1.55 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.55-1H3a2 2 0 1 1 0-4h.09a1.7 1.7 0 0 0 1.55-1.11 1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34h.01a1.7 1.7 0 0 0 1-1.55V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.55 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87v.01a1.7 1.7 0 0 0 1.55 1H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1z"/></svg>
+    </button>
+  </div>
+</header>
+
+<nav class="mainnav" id="mainnav">
+  <button class="tabbtn active" data-tab="tab-combat"><svg viewBox="0 0 24 24"><path d="M14.5 3.5 20 9l-7 7-3-3zM5 19l4-4M4 20l2-2M9 9l6 6"/></svg><span>Combattimento &amp; Caratt.</span></button>
+  <button class="tabbtn" data-tab="tab-spells"><svg viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8zM18 15l.8 2.2L21 18l-2.2.8L18 21l-.8-2.2L15 18l2.2-.8z"/></svg><span>Incantesimi</span></button>
+  <button class="tabbtn" data-tab="tab-equip"><svg viewBox="0 0 24 24"><path d="M6 8V6a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3v2M5 8h14v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2zM9 12h6"/></svg><span>Equip &amp; Carico</span></button>
+  <button class="tabbtn" data-tab="tab-notes"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6zM14 3v5h5M9 12h6M9 16h6"/></svg><span>Tratti &amp; Dati</span></button>
+</nav>
+
+<main>
+<!-- ============ COMBATTIMENTO ============ -->
+<section class="tab-panel" id="tab-combat">
+  <div class="card">
+    <h2>Buff &amp; Effetti Attivi <span class="count" id="cnt-buffs"></span></h2>
+    <div class="card-body">
+      <div class="buff-wrap" id="buff-wrap"></div>
+      <div class="hint" style="margin-top:7px">Tocca un chip per attivarlo o disattivarlo. Sono promemoria di combattimento: non modificano i calcoli.</div>
+    </div>
+  </div>
+
+  <div class="card col-7">
+    <h2>Classe Armatura &amp; Statistiche</h2>
+    <div class="card-body">
+      <div class="combat-grid">
+        <div class="statframe shieldframe">
+          <span class="cap">Classe Armatura</span>
+          <input type="text" class="big-input" id="c-ca-main" placeholder="10" autocomplete="off" aria-label="Classe Armatura">
+          <div class="formula" id="ca-formula">—</div>
+          <button type="button" class="auto-badge" id="c-ca-auto" hidden title="Torna al calcolo automatico">Auto</button>
+        </div>
+        <div class="statframe hexframe">
+          <span class="cap">Iniziativa</span>
+          <input type="text" class="big-input" id="c-iniz-main" placeholder="+0" autocomplete="off" aria-label="Iniziativa">
+          <div class="sub">Des + extra</div>
+          <button type="button" class="auto-badge" id="c-iniz-auto" hidden title="Torna al calcolo automatico">Auto</button>
+        </div>
+        <div class="statframe hexframe">
+          <span class="cap">Competenza</span>
+          <input type="text" class="big-input" id="c-comp-main" placeholder="+0" autocomplete="off" aria-label="Bonus competenza">
+          <div class="sub">Liv. <span id="lvl-mini">—</span></div>
+          <button type="button" class="auto-badge" id="c-comp-auto" hidden title="Torna al calcolo automatico">Auto</button>
+        </div>
+        <div class="statframe">
+          <span class="cap">Velocità</span>
+          <input id="c-vel" data-save placeholder="—" aria-label="Velocità">
+          <input type="text" id="c-scuro" data-save class="sub-input" placeholder="Scurovisione (es. 18 m)" autocomplete="off" aria-label="Scurovisione">
+        </div>
+      </div>
+      <div class="hint" style="margin-top:8px">Scrivi un valore nello scudo per forzare la CA; svuotalo per tornare al calcolo automatico (10 + DES + protezioni). Anche iniziativa e competenza accettano un override diretto.</div>
+    </div>
+  </div>
+
+  <div class="card col-5">
+    <h2>Punti Ferita</h2>
+    <div class="card-body">
+      <div class="hp-top">
+        <div class="hp-nums"><span id="hp-cur">0</span> <small>/ <span id="hp-max">0</span> PF</small></div>
+        <span class="pill" id="hp-state">—</span>
+      </div>
+      <div class="hpbar"><i id="hp-fill" style="width:0%"></i><span class="lbl" id="hp-lbl">0 / 0</span></div>
+      <div class="hpbar temp" style="height:8px;margin-top:4px"><i id="hptemp-fill" style="width:0"></i></div>
+      <div class="hp-mini">
+        <label class="fld"><span>Attuali</span><input type="number" id="c-hpcur" data-save min="0"></label>
+        <label class="fld"><span>Massimi</span><input type="number" id="c-hpmax" data-save min="0"></label>
+        <label class="fld"><span>Temporanei</span><input type="number" id="c-hptemp" data-save min="0"></label>
+      </div>
+      <div class="hp-controls">
+        <input type="number" id="hp-amount" placeholder="Quantità" min="0" aria-label="Quantità di danni o cure">
+        <button class="btn danger small" id="btn-damage">− Danno</button>
+        <button class="btn primary small" id="btn-heal">+ Cura</button>
+      </div>
+      <div class="hp-quick">
+        <button class="btn small" data-hpquick="-5">−5</button>
+        <button class="btn small" data-hpquick="-10">−10</button>
+        <button class="btn small" data-hpquick="5">+5</button>
+        <button class="btn small" data-hpquick="10">+10</button>
+      </div>
+      <div class="divider"></div>
+      <div class="hd-head">
+        <div class="flabel">Dadi Vita</div>
+        <div class="hd-inputs">
+          <input type="number" id="c-dv-tot" data-save min="0" max="30" placeholder="N" aria-label="Numero di dadi vita">
+          <span class="hd-d">d</span>
+          <select id="c-dv-die" data-save aria-label="Tipo di dado vita">
+            <option value="6">d6</option>
+            <option value="8" selected>d8</option>
+            <option value="10">d10</option>
+            <option value="12">d12</option>
+          </select>
+        </div>
+      </div>
+      <div class="flabel" id="hd-label">—</div>
+      <div class="hitdice" id="hitdice"></div>
+      <div class="hint" style="margin-top:5px">Tocca un dado per spenderlo: ti curi del tiro + mod. COS.</div>
+    </div>
+  </div>
+
+  <div class="card col-12">
+    <h2>Armatura, Scudo, Protezioni <span class="count" id="cnt-armor"></span></h2>
+    <div class="card-body">
+      <div id="list-armor"></div>
+      <div class="hint">Ogni protezione ha un valore CA numerico: la somma alimenta lo scudo della Classe Armatura.</div>
+    </div>
+  </div>
+
+  <div class="card col-12">
+    <h2>Caratteristiche &amp; Abilità</h2>
+    <div class="card-body">
+      <div class="ability-grid" id="abilities-grid"></div>
+      <div class="field-grid" style="margin-top:10px">
+        <label class="fld"><span>Percezione passiva</span><div class="total-box" style="padding:4px 7px"><input type="number" class="total-input" id="passive-perc" data-save placeholder="—" aria-label="Percezione passiva"><div class="k" id="passive-perc-formula">10 + 0</div></div></label>
+        <label class="fld"><span>Indagare passivo</span><div class="total-box" style="padding:4px 7px"><input type="number" class="total-input" id="passive-indag" data-save placeholder="—" aria-label="Indagare passivo"><div class="k" id="passive-indag-formula">10 + 0</div></div></label>
+        <label class="fld"><span>Bonus extra Percezione</span><input type="number" id="perc-x" data-save placeholder="0"></label>
+        <label class="fld"><span>Bonus extra Indagare</span><input type="number" id="indag-x" data-save placeholder="0"></label>
+      </div>
+      <div class="hint" style="margin-top:9px">○ competenza · ◇ maestria · 🛡 penalità armatura (svantaggio) · <b>+SAG</b> bonus Taumaturgo · campo numerico = mod. extra.</div>
+    </div>
+  </div>
+
+  <div class="card col-7">
+    <h2>Armi <span class="count" id="cnt-weapons"></span></h2>
+    <div class="card-body"><div id="list-weapons"></div></div>
+  </div>
+
+  <div class="card col-5">
+    <h2>Munizioni &amp; Consumabili Rapidi</h2>
+    <div class="card-body"><div id="ammo-tracker"></div></div>
+  </div>
+</section>
+
+<!-- ============ INCANTESIMI ============ -->
+<section class="tab-panel" id="tab-spells" hidden>
+  <div class="card">
+    <h2>Lancio Incantesimi</h2>
+    <div class="card-body">
+      <div class="spell-toolbar">
+        <label class="fld"><span>Classe da incantatore</span><input id="sp-classe" data-save placeholder="Classe da incantatore"></label>
+        <label class="fld"><span>Caratteristica</span><input id="sp-carat" data-save placeholder="Caratteristica"></label>
+        <label class="fld"><span>CD Tiro Salvezza</span><div class="total-box" style="padding:4px 7px"><input type="number" class="total-input" id="sp-dc" data-save placeholder="—" aria-label="CD tiro salvezza"><div class="k" id="sp-dc-formula">8 + 0 + 0 + 0</div></div></label>
+        <label class="fld"><span>Bonus Attacco</span><div class="total-box" style="padding:4px 7px"><input type="text" class="total-input" id="sp-atk-val" data-save placeholder="+0" aria-label="Bonus attacco incantesimi"><div class="k" id="sp-atk-formula">0 + 0 + 0</div></div></label>
+        <label class="fld"><span>Bonus oggetti (CD/Att.)</span><input type="number" id="sp-obj" data-save placeholder="0" title="Es. +1 Amuleto del Devoto"></label>
+        <label class="fld"><span>Punti Stregoneria / Risorse</span><input type="number" id="sp-points" data-save placeholder="0"></label>
+      </div>
+      <div class="hint" style="margin-top:8px">CD = 8 + competenza + mod. caratteristica + bonus oggetti. Attacco = competenza + mod. caratteristica + bonus oggetti.</div>
+    </div>
+  </div>
+
+  <div class="card col-7">
+    <h2>Slot Incantesimo</h2>
+    <div class="card-body" id="slot-tracker"></div>
+  </div>
+
+  <div class="card col-5">
+    <h2>Filtri Rapidi</h2>
+    <div class="card-body">
+      <div class="filters" id="spell-filters">
+        <button class="btn active" data-filter="all">Tutti</button>
+        <button class="btn" data-filter="prepared">Solo preparati</button>
+        <button class="btn" data-filter="conc">Concentrazione</button>
+        <button class="btn" data-filter="bonus">Azione bonus / Reazione</button>
+      </div>
+      <div class="divider"></div>
+      <div class="hint">I badge compatti mostrano tempo di lancio, concentrazione, rituale, gittata, TS/attacco e dado di effetto. Apri ▾ per il testo completo.</div>
+    </div>
+  </div>
+
+  <div class="card col-12">
+    <h2>Trucchetti <span class="count" id="cnt-sp0"></span></h2>
+    <div class="card-body"><div id="list-sp0"></div></div>
+  </div>
+  <div class="card col-6">
+    <h2>Incantesimi 1° <span class="count" id="cnt-sp1"></span></h2>
+    <div class="card-body"><div id="list-sp1"></div></div>
+  </div>
+  <div class="card col-6">
+    <h2>Incantesimi 2° <span class="count" id="cnt-sp2"></span></h2>
+    <div class="card-body"><div id="list-sp2"></div></div>
+  </div>
+  <div class="card col-6">
+    <h2>Incantesimi 3° <span class="count" id="cnt-sp3"></span></h2>
+    <div class="card-body"><div id="list-sp3"></div></div>
+  </div>
+  <div class="card col-6">
+    <h2>Incantesimi 4° <span class="count" id="cnt-sp4"></span></h2>
+    <div class="card-body"><div id="list-sp4"></div></div>
+  </div>
+  <div class="card col-6">
+    <h2>Incantesimi 5° <span class="count" id="cnt-sp5"></span></h2>
+    <div class="card-body"><div id="list-sp5"></div></div>
+  </div>
+  <div class="card col-6">
+    <h2>Incantesimi 6°–9° <span class="count" id="cnt-sp69"></span></h2>
+    <div class="card-body">
+      <div id="list-sp6"></div>
+      <div id="list-sp7"></div>
+      <div id="list-sp8"></div>
+      <div id="list-sp9"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ EQUIPAGGIAMENTO ============ -->
+<section class="tab-panel" id="tab-equip" hidden>
+  <div class="card">
+    <h2>Zaino &amp; Equipaggiamento <span class="count" id="cnt-inv"></span></h2>
+    <div class="card-body">
+      <div class="inv-head"><span>Oggetto</span><span>Pos.</span><span>Q.tà</span><span>Peso kg</span><span></span><span></span></div>
+      <div id="list-inv"></div>
+      <div class="totals" id="inv-totals"></div>
+      <div class="field-grid three" style="margin-top:10px">
+        <label class="fld"><span>Capacità zaino (kg)</span><input type="number" id="bag-max" data-save placeholder="—" min="0"></label>
+        <label class="fld"><span>Capacità tasca (kg)</span><input type="number" id="pouch-max" data-save placeholder="—" min="0"></label>
+        <label class="fld"><span>Peso totale calcolato</span><div class="total-box" style="padding:4px 7px"><div class="v" id="inv-total-kg">0 kg</div></div></label>
+      </div>
+      <div id="load-warnings"></div>
+    </div>
+  </div>
+
+  <div class="card col-7">
+    <h2>Monete &amp; Tesori</h2>
+    <div class="card-body">
+      <div class="coin-grid">
+        <label class="fld"><span>Platino (mp)</span><input type="number" id="g-mp" data-save placeholder="0" min="0"></label>
+        <label class="fld"><span>Oro (mo)</span><input type="number" id="g-mo" data-save placeholder="0" min="0"></label>
+        <label class="fld"><span>Elettro (me)</span><input type="number" id="g-me" data-save placeholder="0" min="0"></label>
+        <label class="fld"><span>Argento (ma)</span><input type="number" id="g-ma" data-save placeholder="0" min="0"></label>
+        <label class="fld"><span>Rame (mr)</span><input type="number" id="g-mr" data-save placeholder="0" min="0"></label>
+      </div>
+      <label class="fld" style="margin-top:8px"><span>Gemme / gioielli</span><textarea id="g-gemme" data-save rows="2" placeholder="—"></textarea></label>
+      <div class="coin-total"><span class="flabel">Valore totale convertito</span><b id="coin-total">—</b></div>
+      <div class="field-grid two" style="margin-top:8px">
+        <label class="fld"><span>Valore gemme in MO</span><input type="number" id="g-gemme-val" data-save placeholder="0" min="0"></label>
+        <label class="fld" style="justify-content:flex-end"><span>Peso monete</span><label style="display:flex;gap:6px;align-items:center;font-size:11.5px;font-weight:600"><input type="checkbox" id="coin-weight" data-save> Includi nel carico (100 = 1 kg)</label></label>
+      </div>
+      <div class="hint" style="margin-top:7px">1 mp = 10 mo · 1 mo = 2 me · 1 me = 5 ma · 1 ma = 10 mr.</div>
+    </div>
+  </div>
+
+  <div class="card col-5">
+    <h2>Valori Prestati / Depositati</h2>
+    <div class="card-body">
+      <div class="loan-head" style="display:grid;grid-template-columns:1.2fr .8fr 1fr 26px;gap:5px;font-size:8.5px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:4px"><span>Dove / Chi</span><span>Quanto</span><span>Quando</span><span></span></div>
+      <div id="list-loans"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Cavalcatura &amp; Compagni</h2>
+    <div class="card-body">
+      <div class="field-grid">
+        <label class="fld"><span>Nome</span><input id="mount-nome" data-save placeholder="—"></label>
+        <label class="fld"><span>CA</span><input id="mount-ca" data-save placeholder="—"></label>
+        <label class="fld"><span>PF</span><input id="mount-pf" data-save placeholder="—"></label>
+        <label class="fld"><span>Velocità</span><input id="mount-vel" data-save placeholder="—"></label>
+        <label class="fld"><span>Carico</span><input id="mount-carico" data-save placeholder="—"></label>
+      </div>
+      <label class="fld" style="margin-top:8px"><span>Note</span><textarea id="mount-note" data-save rows="2" placeholder="—"></textarea></label>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TRATTI & DATI ============ -->
+<section class="tab-panel" id="tab-notes" hidden>
+  <div class="card col-5">
+    <h2>Ritratto del Personaggio</h2>
+    <div class="card-body">
+      <div class="portrait-wrap">
+        <div class="portrait-frame" id="portrait-frame"><span class="ph">?</span></div>
+        <div class="portrait-tools">
+          <div class="btn-row">
+            <button class="btn small" id="btn-portrait-upload">Carica immagine</button>
+            <button class="btn small" id="btn-portrait-clear">Rimuovi</button>
+          </div>
+          <label class="fld"><span>Oppure URL immagine</span><input type="url" id="portrait-url" data-save placeholder="https://..."></label>
+          <div class="hint">L'immagine caricata viene ridimensionata a max 400×400 px e salvata in Base64 sul dispositivo.</div>
+          <input type="file" id="portrait-file" accept="image/*" hidden>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card col-7">
+    <h2>Identità</h2>
+    <div class="card-body">
+      <div class="field-grid">
+        <label class="fld"><span>Nome personaggio</span><input id="s-nome" data-save placeholder="Nome Personaggio"></label>
+        <label class="fld"><span>Livello</span><input type="number" id="s-livello" data-save min="1" max="20" placeholder="—"></label>
+        <label class="fld"><span>Classe</span><input id="s-classe" data-save placeholder="Classe e sottoclasse"></label>
+        <label class="fld"><span>Razza</span><input id="s-razza" data-save placeholder="—"></label>
+        <label class="fld"><span>Background</span><input id="s-background" data-save placeholder="—"></label>
+        <label class="fld"><span>Allineamento</span><input id="s-allineamento" data-save placeholder="—"></label>
+        <label class="fld"><span>Giocatore</span><input id="s-giocatore" data-save placeholder="—"></label>
+        <label class="fld"><span>P.E. livello successivo</span><input id="xp-next" data-save placeholder="—"></label>
+        <label class="fld"><span>Data creazione</span><input type="date" id="data-creazione" data-save></label>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Dati Personaggio</h2>
+    <div class="card-body">
+      <div class="field-grid">
+        <label class="fld"><span>Divinità</span><input id="n-divinita" data-save placeholder="—"></label>
+        <label class="fld"><span>Dominio</span><input id="n-dominio" data-save placeholder="—"></label>
+        <label class="fld"><span>Età</span><input id="n-eta" data-save placeholder="—"></label>
+        <label class="fld"><span>Sesso</span><input id="n-sesso" data-save placeholder="—"></label>
+        <label class="fld"><span>Altezza</span><input id="n-altezza" data-save placeholder="—"></label>
+        <label class="fld"><span>Peso</span><input id="n-peso" data-save placeholder="—"></label>
+        <label class="fld"><span>Capelli</span><input id="n-capelli" data-save placeholder="—"></label>
+        <label class="fld"><span>Occhi</span><input id="n-occhi" data-save placeholder="—"></label>
+        <label class="fld"><span>Carnagione</span><input id="n-carnagione" data-save placeholder="—"></label>
+        <label class="fld"><span>Taglia</span><input id="n-taglia" data-save placeholder="—"></label>
+        <label class="fld"><span>Data e luogo di nascita</span><input id="n-nascita" data-save placeholder="—"></label>
+        <label class="fld"><span>Velocità all'ora</span><input id="vel-ora" data-save placeholder="es. 4,5 km/h"></label>
+        <label class="fld"><span>Velocità al giorno</span><input id="vel-giorno" data-save placeholder="es. 36 km/giorno"></label>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Competenze &amp; Addestramento</h2>
+    <div class="card-body">
+      <div class="prof-chips" id="prof-chips"></div>
+      <div class="hint" style="margin-top:7px">Armature, armi e strumenti in cui il personaggio è competente.</div>
+    </div>
+  </div>
+
+  <div class="card col-6">
+    <h2>Privilegi di Classe <span class="count" id="cnt-classfeat"></span></h2>
+    <div class="card-body"><div id="list-classfeat"></div></div>
+  </div>
+  <div class="card col-6">
+    <h2>Tratti Razziali <span class="count" id="cnt-racetraits"></span></h2>
+    <div class="card-body"><div id="list-racetraits"></div></div>
+  </div>
+  <div class="card col-6">
+    <h2>Talenti <span class="count" id="cnt-feats"></span></h2>
+    <div class="card-body"><div id="list-feats"></div></div>
+  </div>
+  <div class="card col-6">
+    <h2>Privilegi &amp; Oggetti Passivi <span class="count" id="cnt-perks"></span></h2>
+    <div class="card-body"><div id="list-perks"></div></div>
+  </div>
+
+  <div class="card">
+    <h2>Personalità &amp; Appunti</h2>
+    <div class="card-body">
+      <div class="field-grid single-col" style="grid-template-columns:1fr">
+        <label class="fld"><span>Modi di fare e aspetto</span><textarea id="n-aspetto" data-save rows="2"></textarea></label>
+        <label class="fld"><span>Tratti caratteriali</span><textarea id="n-tratti" data-save rows="2"></textarea></label>
+        <label class="fld"><span>Ideali</span><textarea id="n-ideali" data-save rows="2"></textarea></label>
+        <label class="fld"><span>Legami</span><textarea id="n-legami" data-save rows="2"></textarea></label>
+        <label class="fld"><span>Difetti</span><textarea id="n-difetti" data-save rows="2"></textarea></label>
+        <label class="fld"><span>Compagni e alleati</span><textarea id="n-alleati" data-save rows="2"></textarea></label>
+        <label class="fld"><span>Nemici</span><textarea id="n-nemici" data-save rows="2"></textarea></label>
+        <label class="fld"><span>Background e note</span><textarea id="n-background2" data-save rows="3"></textarea></label>
+        <label class="fld"><span>Appunti rapidi di sessione</span><textarea id="n-rapidi" data-save rows="3" placeholder="Indizi, promemoria, numeri..."></textarea></label>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Lingue <span class="count" id="cnt-langs"></span></h2>
+    <div class="card-body"><div id="list-langs"></div></div>
+  </div>
+</section>
+</main>
+
+<nav class="bottomnav" id="bottomnav">
+  <button class="tabbtn active" data-tab="tab-combat"><svg viewBox="0 0 24 24"><path d="M14.5 3.5 20 9l-7 7-3-3zM5 19l4-4M4 20l2-2M9 9l6 6"/></svg><span>Combattimento</span></button>
+  <button class="tabbtn" data-tab="tab-spells"><svg viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8zM18 15l.8 2.2L21 18l-2.2.8L18 21l-.8-2.2L15 18l2.2-.8z"/></svg><span>Incantesimi</span></button>
+  <button class="tabbtn" data-tab="tab-equip"><svg viewBox="0 0 24 24"><path d="M6 8V6a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3v2M5 8h14v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2zM9 12h6"/></svg><span>Equip &amp; Carico</span></button>
+  <button class="tabbtn" data-tab="tab-notes"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6zM14 3v5h5M9 12h6M9 16h6"/></svg><span>Tratti &amp; Dati</span></button>
+</nav>
+
+<div id="toast" role="status" aria-live="polite"></div>
+<input type="file" id="file-import" accept=".json,application/json" hidden>
+
+<div class="modal-backdrop" id="modal-settings" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+    <h2 id="settings-title">Impostazioni, Cloud &amp; Backup <button type="button" id="modal-close" aria-label="Chiudi">×</button></h2>
+    <div class="modal-body">
+      <div class="modal-section">
+        <h3>Aspetto</h3>
+        <div class="btn-row">
+          <button class="btn" id="btn-theme-light">Pergamena chiara</button>
+          <button class="btn" id="btn-theme-dark">Grimorio scuro</button>
+          <button class="btn" id="btn-theme-auto">Automatico</button>
+        </div>
+      </div>
+
+      <div class="modal-section">
+        <h3>Personaggio</h3>
+        <div class="btn-row">
+          <button class="btn primary" id="btn-load-preset">Carica Preset Vaelin</button>
+          <button class="btn danger" id="btn-clear-sheet">Svuota Scheda (Nuovo PG)</button>
+        </div>
+        <div class="hint">La scheda parte vuota. «Carica Preset Vaelin» inserisce i dati di esempio di Vaelin; «Svuota Scheda» cancella tutti i dati locali (<code>blank_*</code> e <code>vaelin_*</code>) e ricarica una scheda bianca.</div>
+      </div>
+
+      <div class="modal-section" id="cloud-section">
+        <h3>Sincronizzazione Cloud · GitHub Gist</h3>
+        <label class="fld"><span>GitHub Personal Access Token</span><input type="password" id="cloud-token" placeholder="ghp_... (solo scope gist)" autocomplete="off"></label>
+        <label class="fld" style="margin-top:7px"><span>Gist ID (opzionale)</span><input id="cloud-gist" placeholder="Vuoto = ne crea uno nuovo"></label>
+        <div class="btn-row" style="margin-top:8px">
+          <button class="btn primary small" id="btn-cloud-save">Salva e collega</button>
+          <button class="btn small" id="btn-cloud-sync">Sincronizza ora</button>
+          <button class="btn danger small" id="btn-cloud-off">Disconnetti</button>
+        </div>
+        <div class="cloud-state" id="cloud-state" style="margin-top:8px">Cloud non configurato: i dati restano solo su questo dispositivo.</div>
+        <div class="hint">Il token viene salvato solo in locale e non viene mai incluso nei backup o nel Gist. Ogni modifica viene inviata con un debounce di 1,5 s. All'avvio, se il Gist è più recente, la scheda si aggiorna dal cloud.</div>
+      </div>
+
+      <div class="modal-section">
+        <h3>Backup &amp; Ripristino</h3>
+        <div class="btn-row">
+          <button class="btn" id="btn-export">⇩ Esporta JSON</button>
+          <button class="btn" id="btn-import">⇧ Importa JSON</button>
+        </div>
+        <div class="hint">L'export usa un vero download HTML5 con Blob. L'import sostituisce i dati locali e ricarica la scheda.</div>
+      </div>
+
+      <div class="modal-section">
+        <h3>App installabile (PWA)</h3>
+        <div class="btn-row"><button class="btn" id="btn-install" disabled>Installa sul dispositivo</button></div>
+        <div class="hint" id="install-hint">Apri la scheda da un indirizzo HTTPS (o localhost) per installarla come app a schermo intero.</div>
+      </div>
+
+      <div class="modal-section">
+        <h3>Dati locali</h3>
+        <div class="hint">Seed: <span id="seed-state">—</span> · Ultimo salvataggio locale: <span id="local-ts">—</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+/* ============ storage & utility ============ */
+var LS = {
+  get:function(k,d){ try{ var v=localStorage.getItem(k); return v===null?d:JSON.parse(v); }catch(e){ return d; } },
+  set:function(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); markDirty(); }catch(e){ toast('Memoria piena: salvataggio locale non riuscito'); } },
+  rawSet:function(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} },
+  del:function(k){ try{ localStorage.removeItem(k); markDirty(); }catch(e){} },
+  keys:function(){ var out=[]; try{ for(var i=0;i<localStorage.length;i++){ var k=localStorage.key(i); if(k) out.push(k); } }catch(e){} return out; }
+};
+var BOOTING = true, dirtyTimer = null, suppressDirty = false;
+function markDirty(){ if(BOOTING || suppressDirty) return; if(typeof onDirty === 'function') onDirty(); }
+function $(id){ return document.getElementById(id); }
+function num(v,d){
+  if(v===null||v===undefined) return d===undefined?NaN:d;
+  var s=String(v).replace(/\s/g,'').replace(',','.').replace(/[^0-9+\-.]/g,'');
+  if(s===''||s==='+'||s==='-') return d===undefined?NaN:d;
+  var n=parseFloat(s);
+  return isNaN(n) ? (d===undefined?NaN:d) : n;
+}
+function int(v,d){ var n=num(v,d); return isNaN(n)?d:Math.round(n); }
+function signed(n){ n=int(n,0); return (n>=0?'+':'')+n; }
+function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function toast(msg){ var t=$('toast'); if(!t) return; t.textContent=msg; t.classList.add('show'); clearTimeout(toast._t); toast._t=setTimeout(function(){ t.classList.remove('show'); },2800); }
+function f(id,d){ var v=LS.get('blank_f_'+id,null); return v===null?(d===undefined?'':d):v; }
+function setF(id,v){ LS.set('blank_f_'+id,v); }
+
+/* ============ model ============ */
+var ABIL = [
+  {id:'for', label:'Forza', short:'FOR', skills:['Atletica']},
+  {id:'des', label:'Destrezza', short:'DES', skills:['Acrobazia','Furtività','Rapidità di Mano']},
+  {id:'cos', label:'Costituzione', short:'COS', skills:[]},
+  {id:'int', label:'Intelligenza', short:'INT', skills:['Arcano','Indagare','Natura','Religione','Storia']},
+  {id:'sag', label:'Saggezza', short:'SAG', skills:['Addestrare Animali','Intuizione','Medicina','Percezione','Sopravvivenza']},
+  {id:'car', label:'Carisma', short:'CAR', skills:['Intimidire','Inganno','Intrattenere','Persuasione']}
+];
+var SKILL_ABIL = {};
+ABIL.forEach(function(a){ a.skills.forEach(function(s){ SKILL_ABIL[s]=a.id; }); });
+var DEFAULT_SAVES = { for:{p:0,extra:0}, des:{p:0,extra:0}, cos:{p:0,extra:0}, int:{p:0,extra:0}, sag:{p:0,extra:0}, car:{p:0,extra:0} };
+var DEFAULT_SKILLS = {
+  'Atletica':{p:0,e:0,armor:0,wis:0,extra:0},
+  'Acrobazia':{p:0,e:0,armor:0,wis:0,extra:0},
+  'Furtività':{p:0,e:0,armor:0,wis:0,extra:0},
+  'Rapidità di Mano':{p:0,e:0,armor:0,wis:0,extra:0},
+  'Arcano':{p:0,e:0,armor:0,wis:0,extra:0},
+  'Indagare':{p:0,e:0,armor:0,wis:0,extra:0},
+  'Natura':{p:0,e:0,armor:0,wis:0,extra:0},
+  'Religione':{p:0,e:0,armor:0,wis:0,extra:0},
+  'Storia':{p:0,e:0,armor:0,wis:0,extra:0},
+  'Addestrare Animali':{p:0,e:0,armor:0,wis:0,extra:0},
+  'Intuizione':{p:0,e:0,armor:0,wis:0,extra:0},
+  'Medicina':{p:0,e:0,armor:0,wis:0,extra:0},
+  'Percezione':{p:0,e:0,armor:0,wis:0,extra:0},
+  'Sopravvivenza':{p:0,e:0,armor:0,wis:0,extra:0},
+  'Intimidire':{p:0,e:0,armor:0,wis:0,extra:0},
+  'Inganno':{p:0,e:0,armor:0,wis:0,extra:0},
+  'Intrattenere':{p:0,e:0,armor:0,wis:0,extra:0},
+  'Persuasione':{p:0,e:0,armor:0,wis:0,extra:0}
+};
+var PROFS = null;
+function loadProfs(){
+  var st = LS.get('vaelin_prof_v2',null) || {};
+  var out = { saves:{}, skills:{} };
+  ABIL.forEach(function(a){
+    var d = DEFAULT_SAVES[a.id] || {p:0,extra:0};
+    var s = (st.saves && st.saves[a.id]) || {};
+    out.saves[a.id] = { p:(s.p!==undefined?!!s.p:!!d.p), extra:num(s.extra,d.extra||0) };
+    a.skills.forEach(function(name){
+      var dd = DEFAULT_SKILLS[name] || {};
+      var ss = (st.skills && st.skills[name]) || {};
+      out.skills[name] = {
+        p:(ss.p!==undefined?!!ss.p:!!dd.p), e:!!ss.e,
+        armor:(ss.armor!==undefined?!!ss.armor:!!dd.armor),
+        wis:(ss.wis!==undefined?!!ss.wis:!!dd.wis),
+        extra:num(ss.extra,dd.extra||0)
+      };
+    });
+  });
+  PROFS = out;
+  if(!LS.get('vaelin_prof_v2',null)) LS.set('vaelin_prof_v2',PROFS);
+}
+function saveProfs(){ LS.set('vaelin_prof_v2',PROFS); }
+
+var DEFAULT_BUFFS = [];
+var DEFAULT_AMMO = [];
+
+/* ============ migrations (seed block stays untouched) ============ */
+function migrate(){
+  /* Only neutral structural defaults here: never pre-populate character data. */
+  if(LS.get('blank_f_c-hptemp',null)===null) setF('c-hptemp',0);
+  if(LS.get('blank_f_c-dv-used',null)===null) setF('c-dv-used',0);
+  if(LS.get('blank_f_sp-obj',null)===null) setF('sp-obj',0);
+  if(LS.get('blank_f_sp-points',null)===null) setF('sp-points',0);
+  if(LS.get('blank_f_coin-weight',null)===null) setF('coin-weight',false);
+  if(LS.get('blank_f_g-mp',null)===null) setF('g-mp',0);
+  if(LS.get('blank_f_g-me',null)===null) setF('g-me',0);
+  if(LS.get('blank_f_g-ma',null)===null) setF('g-ma',0);
+  if(LS.get('blank_f_g-mr',null)===null) setF('g-mr',0);
+  if(LS.get('blank_f_xp-next',null)===null) setF('xp-next','');
+  if(LS.get('blank_f_vel-ora',null)===null) setF('vel-ora','');
+  if(LS.get('blank_f_vel-giorno',null)===null) setF('vel-giorno','');
+  migrateArmor();
+  migrateResources();
+  migrateInv();
+  if(!LS.get('vaelin_buffs',null)) LS.set('vaelin_buffs',DEFAULT_BUFFS);
+  if(!LS.get('blank_l_ammo',null)) LS.set('blank_l_ammo',DEFAULT_AMMO);
+  if(!LS.get('blank_l_loans',null)) LS.set('blank_l_loans',[]);
+}
+function migrateArmor(){
+  var items = LS.get('blank_l_armor',[]), changed = false;
+  items.forEach(function(it){
+    if(it.ca===undefined){
+      var m = /^\s*([+-]?\d+)\s*CA/i.exec(it.meta||'');
+      it.ca = m ? parseInt(m[1],10) : 0; changed = true;
+    }
+    if(it.maxUses===undefined){
+      if(/^scudo/i.test(it.name||'')){ it.maxUses=1; it.recharge='long'; it.usedUses=0; }
+      else { it.maxUses=0; it.recharge=''; it.usedUses=0; }
+      changed = true;
+    }
+    if(it.usedUses===undefined){ it.usedUses=0; changed=true; }
+  });
+  if(changed) LS.set('blank_l_armor',items);
+}
+function ensureEntryResources(key, rules, addMissing){
+  var items = LS.get(key,[]), changed = false;
+  items.forEach(function(it){
+    if(it.maxUses===undefined){ it.maxUses=0; it.recharge=''; it.usedUses=0; changed=true; }
+    if(it.usedUses===undefined){ it.usedUses=0; changed=true; }
+    if(!it._rulesApplied){
+      rules.forEach(function(r){
+        if(it.name && it.name.toLowerCase().indexOf(r.match)>=0){
+          it.maxUses = r.max; it.recharge = r.recharge; it.usedUses = 0;
+        }
+      });
+      it._rulesApplied = true; changed = true;
+    }
+  });
+  if(addMissing && !items.some(function(x){ return addMissing.test.test(x.name||''); })){
+    items.push(addMissing.make()); changed = true;
+  }
+  if(changed) LS.set(key,items);
+}
+function migrateResources(){
+  ensureEntryResources('blank_l_classfeat',[
+    {match:'incanalare divinità', max:3, recharge:'short'},
+    {match:'iniziato alla magia', max:1, recharge:'long'}
+  ],{
+    test:/scopri magie/i,
+    make:function(){ return {name:'Scopri Magie', meta:'1 uso gratuito / giorno', desc:'Una volta al giorno puoi lanciare gratuitamente un incantesimo di 1° livello che conosci, senza consumare uno slot incantesimo. Questa possibilità si ricarica con un riposo lungo.', maxUses:1, recharge:'long', usedUses:0, _open:false}; }
+  });
+  ensureEntryResources('blank_l_feats',[{match:'iniziato alla magia', max:1, recharge:'long'}]);
+  ensureEntryResources('blank_l_perks',[]);
+  ensureEntryResources('blank_l_racetraits',[]);
+}
+function migrateInv(){
+  var items = LS.get('blank_l_inv',[]), changed = false;
+  items.forEach(function(it){
+    if(it.pos===undefined){
+      var meta = it.meta||'', pos='Altro', qty=1, wt=0;
+      if(/indossat/i.test(meta)) pos='I';
+      else if(/zaino/i.test(meta)) pos='Z';
+      else if(/tasca/i.test(meta)) pos='T';
+      var m = /(\d+(?:[.,]\d+)?)\s*[×x]\s*(\d+(?:[.,]\d+)?)\s*kg/i.exec(meta);
+      if(m){ qty=num(m[1],1); wt=num(m[2],0); }
+      else {
+        var m2 = /(\d+(?:[.,]\d+)?)\s*kg/i.exec(meta);
+        if(m2) wt = num(m2[1],0);
+        if(/^\s*\d+\s*$/.test(meta.trim())) qty = parseInt(meta,10);
+      }
+      it.pos=pos; it.qty=qty; it.weight=wt; changed=true;
+    }
+    if(it.qty===undefined){ it.qty=1; changed=true; }
+    if(it.weight===undefined){ it.weight=0; changed=true; }
+  });
+  if(changed) LS.set('blank_l_inv',items);
+}
+
+/* ============ computed model ============ */
+function scoreRaw(id){ var v=f('ab-'+id+'-score',''); return v===null?'':String(v).trim(); }
+function abMod(id){
+  var raw = scoreRaw(id);
+  if(raw==='') return 0;
+  return Math.floor((int(raw,0)-10)/2);
+}
+function profBonus(){
+  var ov = String(f('c-comp-x','')||'').trim();
+  if(ov!=='') return int(ov,0);
+  var lvRaw = String(f('s-livello','')||'').trim();
+  var lv = int(lvRaw,0);
+  if(lvRaw==='' || lv<=0) return 0;
+  lv = Math.min(20,Math.max(1,lv));
+  return 2 + Math.floor((lv-1)/4);
+}
+function skillTotal(name){
+  var ab = SKILL_ABIL[name] || 'for';
+  var p = PROFS.skills[name] || {p:0,e:0,wis:0,extra:0};
+  var pb = profBonus();
+  return abMod(ab) + (p.p?pb:0) + (p.e?pb:0) + (p.wis?abMod('sag'):0) + int(p.extra,0);
+}
+function saveTotal(id){
+  var p = PROFS.saves[id] || {p:0,extra:0};
+  return abMod(id) + (p.p?profBonus():0) + int(p.extra,0);
+}
+function armorCA(){
+  var manual = String(f('c-ca-x','')||'').trim();
+  if(manual!=='') return { total:int(manual,0), formula:'manuale', manual:true };
+  var items = LS.get('blank_l_armor',[]), total = 0, parts = [];
+  items.forEach(function(it){
+    var n = int(it.ca,0);
+    if(n){ total += n; parts.push(n); }
+  });
+  if(!parts.length){
+    if(scoreRaw('des')!==''){
+      var dex = abMod('des');
+      total = 10 + dex;
+      parts = [10,dex];
+    } else {
+      total = 10;
+      parts = [10];
+    }
+  }
+  return { total:total, formula:parts.join(' + '), manual:false };
+}
+function spellAbilityId(){
+  var v = String(f('sp-carat','')||'').trim().toLowerCase();
+  if(!v) return '';
+  if(v.indexOf('for')===0) return 'for';
+  if(v.indexOf('des')===0) return 'des';
+  if(v.indexOf('cos')===0) return 'cos';
+  if(v.indexOf('int')===0) return 'int';
+  if(v.indexOf('sag')===0) return 'sag';
+  if(v.indexOf('car')===0) return 'car';
+  return '';
+}
+function spellNumbers(){
+  var pb = profBonus(), id = spellAbilityId(), obj = int(f('sp-obj',''),0);
+  var mod = id ? abMod(id) : 0;
+  return { dc:8+pb+mod+obj, atk:pb+mod+obj, pb:pb, mod:mod, obj:obj };
+}
+
+/* ============ topbar & computed DOM ============ */
+function syncInputValue(el,value){
+  if(!el || document.activeElement===el) return;
+  if(el.value!==value) el.value=value;
+}
+function setBigStat(inputId,storeKey,autoBtnId,calcText){
+  var el=$(inputId); if(!el) return;
+  var raw=String(f(storeKey,'')||'').trim();
+  el.placeholder=calcText;
+  if(document.activeElement!==el && el.value!==raw) el.value=raw;
+  el.classList.toggle('overridden',raw!=='');
+  var b=$(autoBtnId); if(b) b.hidden = raw==='';
+}
+function updateTopbar(){
+  var name=String(f('s-nome','')||'');
+  var lvRaw=String(f('s-livello','')||'');
+  var cls=String(f('s-classe','')||'');
+  syncInputValue($('top-nome'),name);
+  syncInputValue($('top-livello'),lvRaw);
+  syncInputValue($('top-classe'),cls);
+  var c=$('top-crest'); if(c) c.textContent=(name.trim().charAt(0)||'?').toUpperCase();
+  var lm=$('lvl-mini'); if(lm) lm.textContent=lvRaw.trim()||'—';
+}
+function updateComputed(){
+  updateTopbar();
+  var pb=profBonus();
+  setBigStat('c-comp-main','c-comp-x','c-comp-auto',signed(pb));
+  var initOv=String(f('c-iniz-x','')||'').trim();
+  setBigStat('c-iniz-main','c-iniz-x','c-iniz-auto',signed(initOv!==''?int(initOv,0):abMod('des')));
+  var ca=armorCA();
+  setBigStat('c-ca-main','c-ca-x','c-ca-auto',String(ca.total));
+  var caf=$('ca-formula'); if(caf) caf.textContent=ca.formula;
+  updateAbilities();
+  updateSpellNumbers();
+  updateHP();
+  updateEncumbrance();
+  updateCoins();
+}
+function updateSpellNumbers(){
+  var s=spellNumbers();
+  var dcOv=String(f('sp-dc','')||'').trim();
+  var atkOv=String(f('sp-atk-val','')||'').trim();
+  var dc=$('sp-dc');
+  if(dc){
+    dc.placeholder=s.dc;
+    if(document.activeElement!==dc && dc.value!==dcOv) dc.value=dcOv;
+    dc.classList.toggle('overridden',dcOv!=='');
+  }
+  var dcf=$('sp-dc-formula'); if(dcf) dcf.textContent = dcOv!=='' ? 'manuale' : '8 + '+s.pb+' + '+s.mod+' + '+s.obj;
+  var atk=$('sp-atk-val');
+  if(atk){
+    atk.placeholder=signed(s.atk);
+    if(document.activeElement!==atk && atk.value!==atkOv) atk.value=atkOv;
+    atk.classList.toggle('overridden',atkOv!=='');
+  }
+  var atkf=$('sp-atk-formula'); if(atkf) atkf.textContent = atkOv!=='' ? 'manuale' : s.pb+' + '+s.mod+' + '+s.obj;
+}
+
+/* ============ abilities ============ */
+function renderAbilities(){
+  var host = $('abilities-grid'); if(!host) return;
+  host.innerHTML = '';
+  ABIL.forEach(function(a){
+    var card = document.createElement('div');
+    card.className = 'ability';
+    var head = '<div class="ab-head"><span>'+esc(a.label)+'</span><em>'+a.short+'</em></div>';
+    var left = '<div class="ab-left">'+
+      '<div class="scorebox"><input type="number" id="ab-'+a.id+'-score" data-save aria-label="Punteggio '+esc(a.label)+'"></div>'+
+      '<div class="modoval" id="mod-'+a.id+'">'+(scoreRaw(a.id)===''?'—':signed(abMod(a.id)))+'</div>'+
+      '</div>';
+    var right = '<div class="ab-right">';
+    right += '<div class="srow save-row" data-savekey="'+a.id+'">'+
+      '<button type="button" class="tog p" data-savetog="p" title="Competente nei TS">○</button>'+
+      '<div class="sname"><span class="sname-txt">Tiro Salvezza</span></div>'+
+      '<button type="button" class="tog gear" data-gear title="Opzioni tiro salvezza">⚙</button>'+
+      '<div class="sval" id="save-'+a.id+'">'+signed(saveTotal(a.id))+'</div>'+
+      '<div class="srow-opts" hidden>'+
+        '<label class="tog extra" title="Modificatore extra TS"><input type="number" data-saveextra placeholder="±"></label>'+
+      '</div></div>';
+    a.skills.forEach(function(name,idx){
+      var hasWis = (name==='Arcano'||name==='Religione');
+      right += '<div class="srow" data-skill="'+esc(name)+'">'+
+        '<button type="button" class="tog p" data-tog="p" title="Competenza">○</button>'+
+        '<button type="button" class="tog e" data-tog="e" title="Maestria (2× competenza)">◇</button>'+
+        '<div class="sname"><span class="sname-txt">'+esc(name)+'</span><span class="svant" data-svant hidden>SVANT.</span>'+(hasWis?'<span class="wisbadge" data-wisbadge hidden>+SAG</span>':'')+'</div>'+
+        '<button type="button" class="tog gear" data-gear title="Opzioni abilità">⚙</button>'+
+        '<div class="sval" id="sk-val-'+a.id+'-'+idx+'">'+signed(skillTotal(name))+'</div>'+
+        '<div class="srow-opts" hidden>'+
+          '<button type="button" class="tog armor" data-tog="armor" title="Penalità armatura: svantaggio">🛡</button>'+
+          (hasWis?'<button type="button" class="tog wis" data-tog="wis" title="Ordine Divino: Taumaturgo (+SAG)">+SAG</button>':'')+
+          '<label class="tog extra" title="Modificatore extra"><input type="number" data-extra placeholder="±"></label>'+
+        '</div></div>';
+    });
+    right += '</div>';
+    card.innerHTML = head + '<div class="ab-body">' + left + right + '</div>';
+    host.appendChild(card);
+
+    var saveRowEl = card.querySelector('[data-savekey]');
+    saveRowEl.addEventListener('click',function(e){
+      var b=e.target.closest('[data-savetog]'); if(!b) return;
+      PROFS.saves[a.id].p = !PROFS.saves[a.id].p; saveProfs(); updateComputed();
+    });
+    var saveGear = saveRowEl.querySelector('[data-gear]');
+    var saveOpts = saveRowEl.querySelector('.srow-opts');
+    if(saveGear && saveOpts) saveGear.addEventListener('click',function(){
+      saveOpts.hidden = !saveOpts.hidden; saveGear.classList.toggle('open',!saveOpts.hidden);
+    });
+    var saveVal = saveRowEl.querySelector('.sval');
+    if(saveVal){
+      saveVal.title='Clicca per modificare il modificatore extra del tiro salvezza';
+      saveVal.addEventListener('click',function(){ openRowOptions(saveRowEl); });
+    }
+    var se = card.querySelector('[data-saveextra]');
+    se.value = int(PROFS.saves[a.id].extra,0) || '';
+    se.addEventListener('input',function(){ PROFS.saves[a.id].extra = int(se.value,0); saveProfs(); updateComputed(); });
+
+    a.skills.forEach(function(name){
+      var row = card.querySelector('[data-skill="'+name+'"]');
+      var st = PROFS.skills[name];
+      row.querySelectorAll('[data-tog]').forEach(function(b){
+        b.addEventListener('click',function(){
+          var k=b.getAttribute('data-tog');
+          st[k] = !st[k]; saveProfs(); updateComputed();
+        });
+      });
+      var ex = row.querySelector('[data-extra]');
+      ex.value = int(st.extra,0) || '';
+      ex.addEventListener('input',function(){ st.extra = int(ex.value,0); saveProfs(); updateComputed(); });
+      var gear = row.querySelector('[data-gear]');
+      var opts = row.querySelector('.srow-opts');
+      if(gear && opts) gear.addEventListener('click',function(){
+        opts.hidden = !opts.hidden; gear.classList.toggle('open',!opts.hidden);
+      });
+      var sval = row.querySelector('.sval');
+      if(sval){
+        sval.title='Clicca per modificare il modificatore extra';
+        sval.addEventListener('click',function(){ openRowOptions(row); });
+      }
+    });
+  });
+  updateAbilities();
+}
+function updateAbilities(){
+  ABIL.forEach(function(a){
+    var m = $('mod-'+a.id); if(m) m.textContent = scoreRaw(a.id)==='' ? '—' : signed(abMod(a.id));
+    var sv = $('save-'+a.id); if(sv) sv.textContent = signed(saveTotal(a.id));
+    var saveRow = document.querySelector('[data-savekey="'+a.id+'"]');
+    if(saveRow){
+      var pt = saveRow.querySelector('[data-savetog]');
+      if(pt) pt.classList.toggle('on',!!PROFS.saves[a.id].p);
+    }
+    a.skills.forEach(function(name,idx){
+      var val = $('sk-val-'+a.id+'-'+idx);
+      if(val) val.textContent = signed(skillTotal(name));
+      var row = document.querySelector('[data-skill="'+name+'"]');
+      if(!row) return;
+      var st = PROFS.skills[name];
+      row.querySelectorAll('[data-tog]').forEach(function(b){
+        var k = b.getAttribute('data-tog');
+        b.classList.toggle('on',!!st[k]);
+        if(k==='wis' && st[k]) b.classList.add('on');
+      });
+      var sv = row.querySelector('[data-svant]');
+      if(sv) sv.hidden = !st.armor;
+      var wb = row.querySelector('[data-wisbadge]');
+      if(wb) wb.hidden = !st.wis;
+    });
+  });
+  var pp = $('passive-perc'), ppf = $('passive-perc-formula');
+  if(pp){
+    var base = skillTotal('Percezione'), extra = int(f('perc-x',''),0);
+    pp.placeholder = 10 + base + extra;
+    if(ppf) ppf.textContent = '10 + '+base+(extra?(' + '+extra):'');
+  }
+  var pi = $('passive-indag'), pif = $('passive-indag-formula');
+  if(pi){
+    var b2 = skillTotal('Indagare'), e2 = int(f('indag-x',''),0);
+    pi.placeholder = 10 + b2 + e2;
+    if(pif) pif.textContent = '10 + '+b2+(e2?(' + '+e2):'');
+  }
+}
+
+/* ============ proficiency chips ============ */
+var PROF_OPTIONS = ['Armature leggere','Armature medie','Armature pesanti','Scudi','Armi semplici','Armi da guerra','Strumenti da artigiano'];
+function renderProfChips(){
+  var wrap = $('prof-chips'); if(!wrap) return;
+  var state = LS.get('blank_profs',{}) || {};
+  wrap.innerHTML = '';
+  PROF_OPTIONS.forEach(function(label){
+    var b = document.createElement('button');
+    b.type='button'; b.className='chip-toggle'+(state[label]?' on':''); b.textContent=label;
+    b.addEventListener('click',function(){
+      state[label]=!state[label]; b.classList.toggle('on',!!state[label]); LS.set('blank_profs',state);
+    });
+    wrap.appendChild(b);
+  });
+}
+
+/* ============ dynamic lists ============ */
+var LIST_RENDERERS = {};
+function autoGrow(el){
+  if(!el) return;
+  el.style.height = 'auto';
+  el.style.height = Math.max(28,el.scrollHeight) + 'px';
+}
+function renderPips(container, it, onChange){
+  container.innerHTML = '';
+  var max = Math.max(0,Math.min(30,int(it.maxUses!==undefined?it.maxUses:it.max,0)));
+  var used = Math.max(0,Math.min(max,int(it.usedUses!==undefined?it.usedUses:it.used,0)));
+  for(var i=0;i<max;i++){
+    (function(i){
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'pip ' + (i<used ? 'used' : 'avail');
+      b.title = i<used ? 'Recupera questo uso' : 'Spendi questo uso';
+      b.setAttribute('aria-label',(i<used?'Recupera':'Spendi')+' uso '+(i+1)+' di '+max);
+      b.addEventListener('click',function(e){
+        e.stopPropagation();
+        if(it.usedUses!==undefined) it.usedUses = i<used ? i : i+1;
+        else it.used = i<used ? i : i+1;
+        onChange();
+      });
+      container.appendChild(b);
+    })(i);
+  }
+  if(!max){
+    container.innerHTML = '';
+  }
+}
+function makeEntryList(containerId, storKey, opts){
+  opts = opts || {};
+  var key = 'blank_l_' + storKey;
+  var items = LS.get(key,[]);
+  var host = $(containerId);
+  if(!host) return;
+  function persist(){ LS.set(key,items); updateCount(); updateComputed(); }
+  function updateCount(){
+    if(opts.countId){ var c=$(opts.countId); if(c) c.textContent = items.length ? '('+items.length+')' : ''; }
+  }
+  function render(){
+    items = LS.get(key,[]);
+    host.innerHTML = '';
+    items.forEach(function(it,i){ host.appendChild(row(it,i)); });
+    var add = document.createElement('button');
+    add.type='button'; add.className='add-row';
+    add.textContent = '+ Aggiungi ' + (opts.addLabel||'voce');
+    add.addEventListener('click',function(){
+      var o = opts.makeEmpty ? opts.makeEmpty() : {name:'',meta:'',desc:'',_open:true};
+      if(opts.resource){ o.maxUses=0; o.recharge=''; o.usedUses=0; }
+      if(opts.prepared) o.prepared=false;
+      items.push(o); persist(); render();
+      var names = host.querySelectorAll('.f-name');
+      if(names.length) names[names.length-1].focus();
+    });
+    host.appendChild(add);
+    updateCount();
+  }
+  function row(it,i){
+    var entry = document.createElement('div');
+    entry.className = 'entry' + (it.used ? ' is-used' : '');
+    var head = document.createElement('div');
+    head.className = 'entry-head';
+
+    if(opts.used){
+      var used = document.createElement('input');
+      used.type='checkbox'; used.checked=!!it.used; used.title='Usato / lanciato';
+      used.addEventListener('change',function(){ it.used=used.checked; entry.classList.toggle('is-used',used.checked); persist(); });
+      head.appendChild(used);
+    }
+
+    var name = document.createElement('input');
+    name.type='text'; name.className='f-name'; name.placeholder=opts.namePlaceholder||'Nome';
+    name.value = it.name||'';
+    name.addEventListener('input',function(){ it.name=name.value; persist(); });
+    head.appendChild(name);
+
+    if(opts.ca){
+      var ca = document.createElement('input');
+      ca.type='number'; ca.value = it.ca!==undefined?it.ca:''; ca.placeholder='CA';
+      ca.title='Valore CA della protezione'; ca.setAttribute('aria-label','Valore CA');
+      ca.style.cssText='flex:0 0 48px;width:48px;text-align:center;padding:4px 3px;font-size:11px';
+      ca.addEventListener('input',function(){ it.ca=int(ca.value,0); persist(); });
+      head.appendChild(ca);
+    }
+
+    if(opts.meta){
+      var meta = document.createElement('textarea');
+      meta.rows=1; meta.className='f-meta autogrow'; meta.placeholder=opts.metaPlaceholder||'Note rapide';
+      meta.value = it.meta||'';
+      meta.addEventListener('input',function(){ it.meta=meta.value; autoGrow(meta); persist(); });
+      head.appendChild(meta);
+    }
+
+    var fieldsWrap = null;
+    if(opts.fields){
+      fieldsWrap = document.createElement('div');
+      fieldsWrap.className = 'entry-fields';
+      opts.fields.forEach(function(fd){
+        var mini = document.createElement('label');
+        mini.className = 'mini';
+        var lab = document.createElement('span'); lab.textContent = fd.label; mini.appendChild(lab);
+        var inp = document.createElement('input');
+        inp.type='text'; inp.placeholder=fd.label; inp.value=it[fd.key]||'';
+        inp.setAttribute('aria-label',fd.label);
+        inp.addEventListener('input',function(){ it[fd.key]=inp.value; persist(); });
+        mini.appendChild(inp);
+        fieldsWrap.appendChild(mini);
+      });
+    }
+
+    var pips = null;
+    if(opts.resource){
+      pips = document.createElement('div');
+      pips.className = 'pips';
+      head.appendChild(pips);
+      var refreshPips = function(){
+        renderPips(pips,it,function(){ persist(); refreshPips(); });
+      };
+      refreshPips();
+    }
+
+    if(opts.prepared){
+      var prep = document.createElement('button');
+      prep.type='button'; prep.className='prep-chip'+(it.prepared?' on':''); prep.textContent='Prep';
+      prep.title = it.prepared?'Preparato: tocca per rimuovere':'Tocca per segnare come preparato';
+      prep.addEventListener('click',function(){
+        it.prepared=!it.prepared; prep.classList.toggle('on',!!it.prepared);
+        prep.title = it.prepared?'Preparato: tocca per rimuovere':'Tocca per segnare come preparato';
+        persist(); applySpellFilter();
+      });
+      head.appendChild(prep);
+    }
+
+    var toggle = document.createElement('button');
+    toggle.type='button'; toggle.className='icon-btn f-toggle'; toggle.textContent = it._open?'▾':'▸';
+    toggle.title='Espandi descrizione'; toggle.setAttribute('aria-label','Espandi descrizione');
+    head.appendChild(toggle);
+
+    var del = document.createElement('button');
+    del.type='button'; del.className='icon-btn del'; del.textContent='×'; del.title='Rimuovi'; del.setAttribute('aria-label','Rimuovi');
+    del.addEventListener('click',function(){ items.splice(i,1); persist(); render(); });
+    head.appendChild(del);
+
+    entry.appendChild(head);
+    if(fieldsWrap) entry.appendChild(fieldsWrap);
+
+    if(opts.resource){
+      var res = document.createElement('div');
+      res.className='entry-res';
+      var lab = document.createElement('span'); lab.textContent='Ricarica'; res.appendChild(lab);
+      var sel = document.createElement('select');
+      [['','Nessuna'],['short','▷ Riposo breve/lungo'],['long','▶ Riposo lungo'],['dawn','Alba / giornaliero']].forEach(function(o){
+        var op=document.createElement('option'); op.value=o[0]; op.textContent=o[1]; sel.appendChild(op);
+      });
+      sel.value = it.recharge||'';
+      sel.addEventListener('change',function(){ it.recharge=sel.value; persist(); });
+      res.appendChild(sel);
+      var mlab=document.createElement('span'); mlab.textContent='Max'; res.appendChild(mlab);
+      var maxIn=document.createElement('input'); maxIn.type='number'; maxIn.className='num'; maxIn.min='0'; maxIn.max='30';
+      maxIn.value = it.maxUses!==undefined?it.maxUses:'';
+      maxIn.placeholder='0'; maxIn.title='Numero massimo di usi'; maxIn.setAttribute('aria-label','Numero massimo di usi');
+      maxIn.addEventListener('input',function(){
+        it.maxUses = Math.max(0,Math.min(30,int(maxIn.value,0)));
+        it.usedUses = Math.min(int(it.usedUses,0),it.maxUses);
+        persist();
+        if(pips) refreshPips();
+      });
+      res.appendChild(maxIn);
+    }
+
+    var body = document.createElement('div');
+    body.className='entry-desc'; body.hidden = !it._open;
+    if(res) body.appendChild(res);
+    var ta = document.createElement('textarea');
+    ta.placeholder = opts.descPlaceholder || 'Descrizione completa...';
+    ta.value = it.desc||'';
+    ta.addEventListener('input',function(){ it.desc=ta.value; persist(); });
+    body.appendChild(ta);
+    entry.appendChild(body);
+
+    toggle.addEventListener('click',function(){
+      it._open=!it._open; body.hidden=!it._open;
+      toggle.textContent = it._open?'▾':'▸'; toggle.classList.toggle('open',it._open);
+      if(it._open) autoGrow(ta);
+      persist();
+    });
+    return entry;
+  }
+  render();
+  LIST_RENDERERS[storKey] = render;
+}
+function renderBuffs(){
+  var host = $('buff-wrap'); if(!host) return;
+  var items = LS.get('vaelin_buffs',DEFAULT_BUFFS);
+  host.innerHTML = '';
+  items.forEach(function(b,i){
+    var chip = document.createElement('span');
+    chip.className = 'buff'+(b.on?' on':'');
+    var dot = document.createElement('span'); dot.className='dot'; chip.appendChild(dot);
+    var txt = document.createElement('span'); txt.textContent=b.name; chip.appendChild(txt);
+    var x = document.createElement('button'); x.type='button'; x.className='x'; x.textContent='×'; x.title='Rimuovi buff';
+    x.addEventListener('click',function(e){ e.stopPropagation(); items.splice(i,1); LS.set('vaelin_buffs',items); renderBuffs(); });
+    chip.appendChild(x);
+    chip.title = 'Tocca per attivare/disattivare · doppio tocco per rinominare';
+    chip.addEventListener('click',function(){ b.on=!b.on; chip.classList.toggle('on',!!b.on); LS.set('vaelin_buffs',items); });
+    chip.addEventListener('dblclick',function(){
+      var v = window.prompt('Nome del buff',b.name);
+      if(v!==null && v.trim()){ b.name=v.trim(); LS.set('vaelin_buffs',items); renderBuffs(); }
+    });
+    host.appendChild(chip);
+  });
+  var add = document.createElement('button');
+  add.type='button'; add.className='buff buff-add'; add.textContent='+ Buff / Effetto';
+  add.addEventListener('click',function(){
+    var v = window.prompt('Nuovo buff o effetto attivo','');
+    if(v!==null && v.trim()){ items.push({name:v.trim(),on:false}); LS.set('vaelin_buffs',items); renderBuffs(); }
+  });
+  host.appendChild(add);
+  var cnt=$('cnt-buffs'); if(cnt) cnt.textContent = items.length?('('+items.length+')'):'';
+}
+
+/* ============ ammo tracker ============ */
+function renderAmmo(){
+  var host = $('ammo-tracker'); if(!host) return;
+  var items = LS.get('blank_l_ammo',[]);
+  host.innerHTML='';
+  function persist(){ LS.set('blank_l_ammo',items); updateComputed(); }
+  items.forEach(function(it,i){
+    var row=document.createElement('div'); row.className='entry'; row.style.marginBottom='5px';
+    var head=document.createElement('div'); head.className='entry-head';
+    var nm=document.createElement('input'); nm.type='text'; nm.className='f-name'; nm.value=it.name||''; nm.placeholder='Munizione / consumabile';
+    nm.addEventListener('input',function(){ it.name=nm.value; persist(); });
+    head.appendChild(nm);
+    var pips=document.createElement('div'); pips.className='pips'; head.appendChild(pips);
+    var mx=document.createElement('input'); mx.type='number'; mx.className='num'; mx.min='0'; mx.max='30';
+    mx.value=it.max!==undefined?it.max:''; mx.placeholder='max'; mx.title='Quantità massima';
+    mx.style.cssText='width:42px;text-align:center;font-size:10px;padding:2px 3px';
+    head.appendChild(mx);
+    var del=document.createElement('button'); del.type='button'; del.className='icon-btn del'; del.textContent='×'; del.title='Rimuovi';
+    head.appendChild(del);
+    row.appendChild(head);
+    host.appendChild(row);
+    function refresh(){ renderPips(pips,it,function(){ it.used=Math.min(int(it.used,0),int(it.max,0)); persist(); refresh(); }); }
+    mx.addEventListener('input',function(){ it.max=Math.max(0,Math.min(30,int(mx.value,0))); it.used=Math.min(int(it.used,0),it.max); persist(); refresh(); });
+    del.addEventListener('click',function(){ items.splice(i,1); persist(); renderAmmo(); });
+    refresh();
+  });
+  var add=document.createElement('button'); add.type='button'; add.className='add-row'; add.textContent='+ Aggiungi munizione / consumabile';
+  add.addEventListener('click',function(){ items.push({name:'',max:1,used:0}); persist(); renderAmmo(); });
+  host.appendChild(add);
+}
+
+/* ============ HP & hit dice ============ */
+function updateHP(){
+  var max = Math.max(0,int(f('c-hpmax',''),0));
+  var cur = Math.max(0,int(f('c-hpcur',max),max));
+  var temp = Math.max(0,int(f('c-hptemp','0'),0));
+  var pct = max ? Math.min(100,Math.round(cur/max*100)) : 0;
+  var tpct = max ? Math.min(100,Math.round(temp/max*100)) : 0;
+  var fill=$('hp-fill'); if(fill) fill.style.width=pct+'%';
+  var tfill=$('hptemp-fill'); if(tfill) tfill.style.width=tpct+'%';
+  var lbl=$('hp-lbl'); if(lbl) lbl.textContent = cur+' / '+max+(temp?('  (+'+temp+' temp)'):'');
+  var cn=$('hp-cur'); if(cn) cn.textContent=cur;
+  var mn=$('hp-max'); if(mn) mn.textContent=max;
+  var st=$('hp-state');
+  if(st){
+    if(cur<=0 && max<=0){ st.textContent='—'; st.className='pill'; }
+    else if(cur<=0){ st.textContent='A terra'; st.className='pill red'; }
+    else if(cur<=Math.ceil(max*0.33)){ st.textContent='Ferito grave'; st.className='pill red'; }
+    else if(cur<=Math.ceil(max*0.66)){ st.textContent='Ferito'; st.className='pill gold'; }
+    else { st.textContent='In salute'; st.className='pill green'; }
+  }
+  var hd=$('hd-label');
+  if(hd){
+    var tot=Math.max(0,int(f('c-dv-tot',''),0)), die=Math.max(2,int(f('c-dv-die','8'),8)), used=Math.max(0,int(f('c-dv-used','0'),0));
+    hd.textContent = tot ? (tot+'d'+die+' · '+(tot-Math.min(used,tot))+' disponibili') : '—';
+  }
+}
+function applyDamage(n){
+  n = Math.max(0,Math.round(num(n,0)));
+  if(!n) return;
+  var max=Math.max(0,int(f('c-hpmax',''),0));
+  var cur=Math.max(0,int(f('c-hpcur',max),max));
+  var temp=Math.max(0,int(f('c-hptemp','0'),0));
+  var fromTemp=Math.min(temp,n);
+  temp-=fromTemp;
+  cur=Math.max(0,cur-(n-fromTemp));
+  setF('c-hptemp',temp); setF('c-hpcur',cur);
+  var a=$('c-hpcur'), b=$('c-hptemp');
+  if(a) a.value=cur; if(b) b.value=temp;
+  updateHP();
+  toast('−'+n+' PF'+(fromTemp?(' · '+fromTemp+' dai temporanei'):''));
+}
+function applyHeal(n){
+  n = Math.max(0,Math.round(num(n,0)));
+  if(!n) return;
+  var max=Math.max(0,int(f('c-hpmax',''),0));
+  var cur=Math.max(0,int(f('c-hpcur',max),max));
+  var before=cur;
+  cur=Math.min(max,cur+n);
+  setF('c-hpcur',cur);
+  var a=$('c-hpcur'); if(a) a.value=cur;
+  updateHP();
+  toast('+'+ (cur-before) +' PF');
+}
+function renderHitDice(){
+  var host=$('hitdice'); if(!host) return;
+  host.innerHTML='';
+  var tot=Math.max(0,Math.min(30,int(f('c-dv-tot',''),0)));
+  var used=Math.max(0,Math.min(tot,int(f('c-dv-used','0'),0)));
+  for(var i=0;i<tot;i++){
+    (function(i){
+      var b=document.createElement('button'); b.type='button';
+      b.className='die'+(i<used?' used':'');
+      b.textContent=String(i+1);
+      b.title = i<used ? 'Dado speso: tocca per recuperarlo' : 'Spendi il dado e curati';
+      b.addEventListener('click',function(){
+        var u=Math.max(0,int(f('c-dv-used','0'),0));
+        if(i<u){ setF('c-dv-used',u-1); renderHitDice(); updateHP(); return; }
+        var die=Math.max(2,int(f('c-dv-die','8'),8));
+        var roll=Math.floor(Math.random()*die)+1;
+        var heal=Math.max(1,roll+abMod('cos'));
+        setF('c-dv-used',Math.min(tot,u+1));
+        applyHeal(heal);
+        renderHitDice();
+        toast('Dado vita: '+roll+' + '+signed(abMod('cos'))+' = '+heal+' PF');
+      });
+      host.appendChild(b);
+    })(i);
+  }
+  updateHP();
+}
+
+/* ============ spell slots ============ */
+function renderSlotTracker(){
+  var host=$('slot-tracker'); if(!host) return;
+  host.innerHTML='';
+  for(var lv=1;lv<=9;lv++){
+    (function(lv){
+      var row=document.createElement('div'); row.className='slot-row';
+      var lab=document.createElement('div'); lab.className='lv'; lab.textContent=lv+'°'; row.appendChild(lab);
+      var pips=document.createElement('div'); pips.className='pips'; pips.id='slot-pips-'+lv; row.appendChild(pips);
+      var cnt=document.createElement('span'); cnt.className='cnt'; cnt.id='slot-cnt-'+lv; row.appendChild(cnt);
+      var maxIn=document.createElement('input'); maxIn.type='number'; maxIn.id='slot-max-'+lv; maxIn.min='0'; maxIn.max='20';
+      maxIn.value = int(f('slot-'+lv,'0'),0) || '';
+      maxIn.title='Slot massimi di '+lv+'° livello'; maxIn.setAttribute('aria-label','Slot massimi di '+lv+'° livello');
+      maxIn.style.cssText='width:46px;text-align:center;font-size:11px;padding:3px';
+      maxIn.addEventListener('input',function(){
+        var v=Math.max(0,Math.min(20,int(maxIn.value,0)));
+        setF('slot-'+lv,v);
+        var used=LS.get('blank_slotused',{})||{};
+        used[lv]=Math.min(int(used[lv],0),v);
+        LS.set('blank_slotused',used);
+        refreshSlots();
+      });
+      row.appendChild(maxIn);
+      host.appendChild(row);
+    })(lv);
+  }
+  refreshSlots();
+}
+function refreshSlots(){
+  var used=LS.get('blank_slotused',{})||{};
+  if(typeof used!=='object') used={};
+  Object.keys(used).forEach(function(k){ var n=parseInt(k,10); if(!(n>=1&&n<=9)) delete used[k]; });
+  for(var lv=1;lv<=9;lv++){
+    (function(lv){
+      var max=Math.max(0,Math.min(20,int(f('slot-'+lv,'0'),0)));
+      var u=Math.max(0,Math.min(max,int(used[lv],0)));
+      used[lv]=u;
+      var pips=$('slot-pips-'+lv);
+      if(pips){
+        pips.innerHTML='';
+        for(var i=0;i<max;i++){
+          (function(i){
+            var b=document.createElement('button'); b.type='button';
+            b.className='pip '+(i<u?'used':'avail');
+            b.title = i<u?'Slot usato: tocca per liberarlo':'Segna slot come usato';
+            b.addEventListener('click',function(){
+              var uu=LS.get('blank_slotused',{})||{};
+              uu[lv] = i<u ? i : i+1;
+              LS.set('blank_slotused',uu); refreshSlots();
+            });
+            pips.appendChild(b);
+          })(i);
+        }
+        if(!max){ var s=document.createElement('span'); s.style.cssText='font-size:9px;color:var(--muted)'; s.textContent='—'; pips.appendChild(s); }
+      }
+      var c=$('slot-cnt-'+lv); if(c) c.textContent = max ? (u+'/'+max) : '';
+    })(lv);
+  }
+  LS.set('blank_slotused',used);
+}
+
+/* ============ equipment ============ */
+function renderInventory(){
+  var host=$('list-inv'); if(!host) return;
+  var items=LS.get('blank_l_inv',[]);
+  function persist(){ LS.set('blank_l_inv',items); updateEncumbrance(); }
+  function render(){
+    host.innerHTML='';
+    items.forEach(function(it,i){
+      var row=document.createElement('div'); row.className='inv-row';
+      var main=document.createElement('div'); main.className='inv-main';
+      var nm=document.createElement('input'); nm.type='text'; nm.className='nm'; nm.value=it.name||''; nm.placeholder='Nome oggetto';
+      nm.addEventListener('input',function(){ it.name=nm.value; persist(); });
+      main.appendChild(nm);
+      var pos=document.createElement('select'); pos.className='pos'; pos.title='Posizione';
+      [['I','I · Indoss.'],['Z','Z · Zaino'],['T','T · Tasca'],['Altro','Altro']].forEach(function(o){
+        var op=document.createElement('option'); op.value=o[0]; op.textContent=o[1]; op.title=o[0]==='I'?'Indossato':o[0]==='Z'?'Nello zaino':o[0]==='T'?'Tasca da cintura':'Altro'; pos.appendChild(op);
+      });
+      pos.value=it.pos||'Altro';
+      pos.addEventListener('change',function(){ it.pos=pos.value; persist(); });
+      main.appendChild(pos);
+      var qty=document.createElement('input'); qty.type='number'; qty.className='qty'; qty.min='0'; qty.value=it.qty!==undefined?it.qty:1; qty.title='Quantità';
+      qty.addEventListener('input',function(){ it.qty=Math.max(0,int(qty.value,1)); persist(); });
+      main.appendChild(qty);
+      var wt=document.createElement('input'); wt.type='number'; wt.className='wt'; wt.min='0'; wt.step='0.1'; wt.value=it.weight!==undefined?it.weight:0; wt.title='Peso unitario in kg';
+      wt.addEventListener('input',function(){ it.weight=Math.max(0,num(wt.value,0)); persist(); });
+      main.appendChild(wt);
+      var tog=document.createElement('button'); tog.type='button'; tog.className='icon-btn inv-toggle'; tog.textContent=it._open?'▾':'▸'; tog.title='Descrizione';
+      tog.style.cssText='width:24px;height:24px;padding:0';
+      main.appendChild(tog);
+      var del=document.createElement('button'); del.type='button'; del.className='icon-btn del'; del.textContent='×'; del.title='Rimuovi';
+      del.style.cssText='width:24px;height:24px;padding:0';
+      del.addEventListener('click',function(){ items.splice(i,1); persist(); render(); });
+      main.appendChild(del);
+      row.appendChild(main);
+      var body=document.createElement('div'); body.className='inv-desc'; body.hidden=!it._open;
+      var ta=document.createElement('textarea'); ta.value=it.desc||''; ta.placeholder='Descrizione completa...';
+      ta.addEventListener('input',function(){ it.desc=ta.value; persist(); });
+      body.appendChild(ta); row.appendChild(body);
+      tog.addEventListener('click',function(){ it._open=!it._open; body.hidden=!it._open; tog.textContent=it._open?'▾':'▸'; persist(); });
+      host.appendChild(row);
+    });
+    var add=document.createElement('button'); add.type='button'; add.className='add-row'; add.textContent='+ Aggiungi oggetto';
+    add.addEventListener('click',function(){ items.push({name:'',pos:'Z',qty:1,weight:0,desc:'',_open:true}); persist(); render(); });
+    host.appendChild(add);
+    var c=$('cnt-inv'); if(c) c.textContent=items.length?('('+items.length+')'):'';
+  }
+  render();
+  updateEncumbrance();
+}
+function invWeights(){
+  var items=LS.get('blank_l_inv',[]);
+  var out={total:0,I:0,Z:0,T:0,Altro:0};
+  items.forEach(function(it){
+    var w=Math.max(0,num(it.weight,0))*Math.max(0,int(it.qty,1));
+    out.total+=w;
+    var p=it.pos||'Altro';
+    if(out[p]===undefined) p='Altro';
+    out[p]+=w;
+  });
+  return out;
+}
+function coinData(){
+  var mp=Math.max(0,int(f('g-mp','0'),0)), mo=Math.max(0,int(f('g-mo','0'),0)), me=Math.max(0,int(f('g-me','0'),0)), ma=Math.max(0,int(f('g-ma','0'),0)), mr=Math.max(0,int(f('g-mr','0'),0));
+  var count=mp+mo+me+ma+mr;
+  var value=mp*10+mo+me*0.5+ma*0.1+mr*0.01;
+  var gems=Math.max(0,num(f('g-gemme-val','0'),0));
+  return { count:count, value:value+gems, coinValue:value, weight:count/100 };
+}
+function fmt(n){
+  var v=Math.round(n*100)/100;
+  return v.toLocaleString('it-IT',{maximumFractionDigits:2});
+}
+function updateCoins(){
+  var c=coinData();
+  var el=$('coin-total'); if(el) el.textContent=fmt(c.value)+' mo';
+  updateEncumbrance();
+}
+function updateEncumbrance(){
+  var w=invWeights();
+  var coins=coinData();
+  var coinOn=!!LS.get('blank_f_coin-weight',false);
+  var carried=w.total+(coinOn?coins.weight:0);
+  var str=int(f('ab-for-score',''),0);
+  var light=str*2.5, heavy=str*5, max=str*7.5, push=str*15;
+  var bagMax=Math.max(0,num(f('bag-max',''),0));
+  var pouchMax=Math.max(0,num(f('pouch-max',''),0));
+  var host=$('inv-totals');
+  if(host){
+    host.innerHTML =
+      '<div class="total-box"><div class="k">Totale sul PG (I+Z+T)</div><div class="v">'+fmt(carried)+' kg</div></div>'+
+      '<div class="total-box"><div class="k">Indossato (I)</div><div class="v">'+fmt(w.I)+' kg</div></div>'+
+      '<div class="total-box'+(w.Z>bagMax?' over':'')+'"><div class="k">Zaino (Z / max)</div><div class="v">'+fmt(w.Z)+' / '+fmt(bagMax)+' kg</div></div>'+
+      '<div class="total-box'+(w.T>pouchMax?' over':'')+'"><div class="k">Tasca (T / max)</div><div class="v">'+fmt(w.T)+' / '+fmt(pouchMax)+' kg</div></div>';
+  }
+  var tk=$('inv-total-kg'); if(tk) tk.textContent=fmt(carried)+' kg';
+  var warn=$('load-warnings');
+  if(warn){
+    var status='ok', msg='Carico leggero: nessuna penalità.';
+    if(carried>heavy){ status='over'; msg='<b>Ingombro pesante:</b> Movimento −6 m e svantaggio a Forza, Destrezza e Costituzione.'; }
+    else if(carried>light){ status='warn'; msg='<b>Ingombro:</b> Movimento −3 m.'; }
+    warn.innerHTML =
+      '<div class="totals" style="margin-top:8px">'+
+        '<div class="total-box"><div class="k">Ingombro ×2,5</div><div class="v">'+fmt(light)+' kg</div></div>'+
+        '<div class="total-box"><div class="k">Ingombro pesante ×5</div><div class="v">'+fmt(heavy)+' kg</div></div>'+
+        '<div class="total-box"><div class="k">Carico max ×7,5</div><div class="v">'+fmt(max)+' kg</div></div>'+
+        '<div class="total-box"><div class="k">Spingere ×15</div><div class="v">'+fmt(push)+' kg</div></div>'+
+      '</div>'+
+      '<div class="warnbox '+(status==='ok'?'ok':'')+'">'+msg+(coinOn?(' Peso monete incluso: '+fmt(coins.weight)+' kg.'):'')+'</div>';
+  }
+}
+function renderLoans(){
+  var host=$('list-loans'); if(!host) return;
+  var items=LS.get('blank_l_loans',[]);
+  function persist(){ LS.set('blank_l_loans',items); }
+  function render(){
+    host.innerHTML='';
+    items.forEach(function(it,i){
+      var row=document.createElement('div'); row.className='loan-row';
+      [['who','Dove / chi'],['amount','Quanto'],['when','Quando']].forEach(function(fd){
+        var inp=document.createElement('input'); inp.type='text'; inp.placeholder=fd[1]; inp.value=it[fd[0]]||'';
+        inp.addEventListener('input',function(){ it[fd[0]]=inp.value; persist(); });
+        row.appendChild(inp);
+      });
+      var del=document.createElement('button'); del.type='button'; del.className='icon-btn del'; del.textContent='×'; del.title='Rimuovi';
+      del.style.cssText='width:24px;height:24px;padding:0';
+      del.addEventListener('click',function(){ items.splice(i,1); persist(); render(); });
+      row.appendChild(del);
+      host.appendChild(row);
+    });
+    var add=document.createElement('button'); add.type='button'; add.className='add-row'; add.textContent='+ Aggiungi valore';
+    add.addEventListener('click',function(){ items.push({who:'',amount:'',when:''}); persist(); render(); });
+    host.appendChild(add);
+  }
+  render();
+}
+
+/* ============ spells ============ */
+var SPELL_FILTER = 'all';
+var SPELL_RENDERERS = {};
+function spellBadges(sp){
+  var txt = ((sp.meta||'')+' \n '+(sp.desc||''));
+  var out = [];
+  function add(t,c){ if(!t) return; for(var i=0;i<out.length;i++){ if(out[i][0]===t) return; } out.push([t,c||'']); }
+  var cast = /Tempo di lancio:\s*([^.\n]+)/i.exec(txt);
+  if(cast){
+    var c = cast[1].toLowerCase();
+    if(/reazione/.test(c)) add('1R','cast');
+    else if(/bonus/.test(c)) add('1AB','cast');
+    else if(/minut/.test(c)){ var mm=/(\d+)\s*minut/.exec(c); add((mm?mm[1]:'')+'m','cast'); }
+    else if(/ora/.test(c)) add('1h','cast');
+    else add('1A','cast');
+  } else if(/azione bonus/i.test(txt)) add('1AB','cast');
+  else if(/reazione/i.test(txt)) add('1R','cast');
+  if(/concentrazione/i.test(txt)) add('C','conc');
+  if(/rituale/i.test(txt)) add('R','rit');
+  var range = /Gittata:\s*([^.\n]+)/i.exec(txt);
+  if(range){ add(shorten(range[1]),'range'); }
+  else if(sp.meta){
+    var first = String(sp.meta).split('·')[0].trim();
+    if(first && !/TS|concentrazione/i.test(first)) add(shorten(first),'range');
+  }
+  var ts = /TS(?:\s+su)?\s+([A-Za-zÀ-ÿ]+)/i.exec(txt) || /tiro salvezza su ([A-Za-zÀ-ÿ]+)/i.exec(txt);
+  if(ts) add('TS '+ts[1],'');
+  else if(/attacco con incantesimo|tirare per colpire con l'incantesimo|attacco magico/i.test(txt)) add('Att.','');
+  var dice = /(\d+d\d+(?:\s*[+\-]\s*\d+)?)/i.exec(txt);
+  if(dice) add(dice[1],'dmg');
+  return out;
+}
+function shorten(s){
+  s = String(s||'').trim();
+  return s.length>22 ? s.slice(0,21)+'…' : s;
+}
+function makeSpellList(level, containerId){
+  var host = $(containerId); if(!host) return;
+  var key = 'blank_l_sp'+level;
+  var items = LS.get(key,[]);
+  function persist(){ LS.set(key,items); updateSpellCount(level,items); applySpellFilter(); }
+  function render(){
+    items = LS.get(key,[]);
+    host.innerHTML='';
+    items.forEach(function(it,i){
+      var conc = /concentrazione/i.test((it.meta||'')+' '+(it.desc||''));
+      var bonus = /azione bonus|reazione/i.test((it.meta||'')+' '+(it.desc||''));
+      var el = document.createElement('div');
+      el.className = 'spell'+(it.used?' used':'');
+      el.setAttribute('data-prepared',it.prepared?'1':'0');
+      el.setAttribute('data-conc',conc?'1':'0');
+      el.setAttribute('data-bonus',bonus?'1':'0');
+      var head=document.createElement('div'); head.className='spell-head';
+      var used=document.createElement('input'); used.type='checkbox'; used.checked=!!it.used; used.title='Lanciato / usato';
+      used.addEventListener('change',function(){ it.used=used.checked; el.classList.toggle('used',used.checked); persist(); });
+      head.appendChild(used);
+      var nm=document.createElement('input'); nm.type='text'; nm.className='sname'; nm.value=it.name||''; nm.placeholder='Nome incantesimo';
+      nm.addEventListener('input',function(){ it.name=nm.value; persist(); });
+      head.appendChild(nm);
+      var badges=document.createElement('span'); badges.className='badges';
+      spellBadges(it).forEach(function(b){ var s=document.createElement('span'); s.className='badge '+(b[1]||''); s.textContent=b[0]; badges.appendChild(s); });
+      head.appendChild(badges);
+      var prep=document.createElement('button'); prep.type='button'; prep.className='prep-chip'+(it.prepared?' on':''); prep.textContent='Prep';
+      prep.title = it.prepared?'Preparato: tocca per rimuovere':'Tocca per segnare come preparato';
+      prep.addEventListener('click',function(){ it.prepared=!it.prepared; prep.classList.toggle('on',!!it.prepared); prep.title=it.prepared?'Preparato: tocca per rimuovere':'Tocca per segnare come preparato'; persist(); });
+      head.appendChild(prep);
+      var tog=document.createElement('button'); tog.type='button'; tog.className='icon-btn'; tog.textContent=it._open?'▾':'▸'; tog.title='Testo completo';
+      tog.style.cssText='width:24px;height:24px;padding:0;background:transparent;border-color:transparent;color:var(--muted)';
+      head.appendChild(tog);
+      var del=document.createElement('button'); del.type='button'; del.className='icon-btn del'; del.textContent='×'; del.title='Rimuovi';
+      del.style.cssText='width:24px;height:24px;padding:0;background:transparent;border-color:transparent;color:var(--muted)';
+      del.addEventListener('click',function(){ items.splice(i,1); persist(); render(); });
+      head.appendChild(del);
+      el.appendChild(head);
+      var body=document.createElement('div'); body.className='spell-body'; body.hidden=!it._open;
+      var ta=document.createElement('textarea'); ta.value=it.desc||''; ta.placeholder='Descrizione completa dell\'incantesimo...';
+      ta.addEventListener('input',function(){ it.desc=ta.value; persist(); });
+      body.appendChild(ta); el.appendChild(body);
+      tog.addEventListener('click',function(){ it._open=!it._open; body.hidden=!it._open; tog.textContent=it._open?'▾':'▸'; persist(); });
+      host.appendChild(el);
+    });
+    var add=document.createElement('button'); add.type='button'; add.className='add-row';
+    add.textContent='+ Aggiungi '+(level==='0'?'trucchetto':'incantesimo di '+level+'°');
+    add.addEventListener('click',function(){
+      items.push({name:'',meta:'',desc:'',_open:true,used:false,prepared:level!=='0'});
+      persist(); render();
+    });
+    host.appendChild(add);
+    updateSpellCount(level,items);
+    applySpellFilter();
+  }
+  render();
+  SPELL_RENDERERS[level] = render;
+}
+function updateSpellCount(level,items){
+  var id = level==='0' ? 'cnt-sp0' : (level==='6'||level==='7'||level==='8'||level==='9' ? 'cnt-sp69' : 'cnt-sp'+level);
+  var c=$(id); if(!c) return;
+  if(id==='cnt-sp69'){
+    var n=0;
+    ['6','7','8','9'].forEach(function(l){ n += (LS.get('blank_l_sp'+l,[])||[]).length; });
+    c.textContent = n?('('+n+')'):'';
+  } else {
+    c.textContent = items.length?('('+items.length+')'):'';
+  }
+}
+function applySpellFilter(){
+  document.querySelectorAll('.spell').forEach(function(el){
+    var show = true;
+    if(SPELL_FILTER==='prepared') show = el.getAttribute('data-prepared')==='1';
+    else if(SPELL_FILTER==='conc') show = el.getAttribute('data-conc')==='1';
+    else if(SPELL_FILTER==='bonus') show = el.getAttribute('data-bonus')==='1';
+    el.classList.toggle('hide',!show);
+  });
+}
+function setupSpellFilters(){
+  var wrap=$('spell-filters'); if(!wrap) return;
+  wrap.querySelectorAll('[data-filter]').forEach(function(b){
+    b.addEventListener('click',function(){
+      SPELL_FILTER=b.getAttribute('data-filter');
+      wrap.querySelectorAll('[data-filter]').forEach(function(x){ x.classList.toggle('active',x===b); });
+      applySpellFilter();
+    });
+  });
+}
+
+/* ============ rests ============ */
+function resetResourceLists(mode){
+  ['blank_l_classfeat','blank_l_perks','blank_l_racetraits','blank_l_feats','blank_l_armor'].forEach(function(key){
+    var items=LS.get(key,[]), changed=false;
+    items.forEach(function(it){
+      if(mode==='long'){
+        if(it.recharge==='short'||it.recharge==='long'||it.recharge==='dawn'){ it.usedUses=0; changed=true; }
+      } else if(it.recharge==='short'){ it.usedUses=0; changed=true; }
+    });
+    if(changed) LS.set(key,items);
+  });
+  Object.keys(LIST_RENDERERS).forEach(function(k){ try{ LIST_RENDERERS[k](); }catch(e){} });
+}
+function restShort(){
+  resetResourceLists('short');
+  toast('Riposo breve: risorse ▷ ricaricate. Spendi i dadi vita per curarti.');
+}
+function restLong(){
+  if(!window.confirm('Riposo lungo: PF al massimo, metà dadi vita recuperati, tutti gli slot e le risorse a riposo lungo ripristinati. Procedere?')) return;
+  var max=Math.max(0,int(f('c-hpmax',''),0));
+  setF('c-hpcur',max); setF('c-hptemp',0);
+  var tot=Math.max(0,int(f('c-dv-tot',''),0));
+  var used=Math.max(0,int(f('c-dv-used','0'),0));
+  setF('c-dv-used',Math.max(0,used-Math.floor(tot/2)));
+  LS.set('blank_slotused',{});
+  for(var lv=0;lv<=9;lv++){
+    var key='blank_l_sp'+lv;
+    var items=LS.get(key,[]);
+    if(!items.length) continue;
+    var ch=false;
+    items.forEach(function(it){ if(it.used){ it.used=false; ch=true; } });
+    if(ch) LS.set(key,items);
+  }
+  resetResourceLists('long');
+  refreshSlots();
+  Object.keys(SPELL_RENDERERS).forEach(function(k){ try{ SPELL_RENDERERS[k](); }catch(e){} });
+  var a=$('c-hpcur'), b=$('c-hptemp');
+  if(a) a.value=max; if(b) b.value=0;
+  renderHitDice(); updateComputed();
+  toast('Riposo lungo completato.');
+}
+function setupRest(){
+  var s=$('btn-shortrest'), l=$('btn-longrest');
+  if(s) s.addEventListener('click',restShort);
+  if(l) l.addEventListener('click',restLong);
+  var dmg=$('btn-damage'), heal=$('btn-heal'), amt=$('hp-amount');
+  if(dmg) dmg.addEventListener('click',function(){ applyDamage(amt?amt.value:0); if(amt) amt.value=''; });
+  if(heal) heal.addEventListener('click',function(){ applyHeal(amt?amt.value:0); if(amt) amt.value=''; });
+  if(amt) amt.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); applyDamage(amt.value); amt.value=''; } });
+  document.querySelectorAll('[data-hpquick]').forEach(function(b){
+    b.addEventListener('click',function(){
+      var v=int(b.getAttribute('data-hpquick'),0);
+      if(v<0) applyDamage(-v); else applyHeal(v);
+    });
+  });
+}
+
+/* ============ in-place editing ============ */
+function setupTopbarSync(){
+  function link(inputId,storeKey,sourceId){
+    var el=$(inputId), src=$(sourceId);
+    if(!el) return;
+    function apply(){
+      var v=el.value;
+      setF(storeKey,v);
+      if(src && document.activeElement!==src) src.value=v;
+      updateComputed();
+    }
+    el.addEventListener('input',apply);
+    el.addEventListener('change',apply);
+  }
+  link('top-nome','s-nome','s-nome');
+  link('top-livello','s-livello','s-livello');
+  link('top-classe','s-classe','s-classe');
+}
+function setupBigStatInputs(){
+  [['c-ca-main','c-ca-x','c-ca-auto'],
+   ['c-iniz-main','c-iniz-x','c-iniz-auto'],
+   ['c-comp-main','c-comp-x','c-comp-auto']].forEach(function(m){
+    var el=$(m[0]), btn=$(m[2]);
+    if(!el) return;
+    function commit(){ setF(m[1],el.value); updateComputed(); }
+    el.addEventListener('input',commit);
+    el.addEventListener('change',commit);
+    el.addEventListener('blur',commit);
+    if(btn) btn.addEventListener('click',function(){
+      setF(m[1],'');
+      el.value='';
+      updateComputed();
+      el.focus();
+    });
+  });
+}
+function openRowOptions(row){
+  if(!row) return;
+  var opts=row.querySelector('.srow-opts'), gear=row.querySelector('[data-gear]');
+  if(!opts) return;
+  opts.hidden=false;
+  if(gear) gear.classList.add('open');
+  var inp=opts.querySelector('input');
+  if(inp){ inp.focus(); if(inp.select) inp.select(); }
+}
+
+/* ============ simple fields ============ */
+function bindSimpleFields(){
+  document.querySelectorAll('[data-save]').forEach(function(el){
+    var key='blank_f_'+el.id;
+    var saved=LS.get(key,null);
+    if(saved!==null){
+      if(el.type==='checkbox') el.checked=!!saved;
+      else el.value=saved;
+    }
+    var evt=(el.tagName==='SELECT'||el.type==='checkbox')?'change':'input';
+    el.addEventListener(evt,function(){
+      LS.set(key, el.type==='checkbox'?el.checked:el.value);
+      if(el.id==='c-hpmax'){
+        var m=Math.max(0,int(el.value,0));
+        var cur=int(f('c-hpcur',m),m);
+        if(cur>m){ setF('c-hpcur',m); var c=$('c-hpcur'); if(c) c.value=m; }
+      }
+      if(el.id==='portrait-url') renderPortrait();
+      if(el.id==='c-dv-tot' || el.id==='c-dv-die') renderHitDice();
+      updateComputed();
+    });
+  });
+}
+
+/* ============ theme ============ */
+function applyTheme(mode,persist){
+  mode = (mode==='light'||mode==='dark') ? mode : 'auto';
+  var root=document.documentElement;
+  if(mode==='auto') root.removeAttribute('data-theme');
+  else root.setAttribute('data-theme',mode);
+  var meta=document.querySelector('meta[name="theme-color"]');
+  if(meta) meta.setAttribute('content', mode==='dark' ? '#121110' : '#1e1b18');
+  if(persist) LS.set('vaelin_theme',mode);
+}
+function setupTheme(){
+  applyTheme(LS.get('vaelin_theme','auto'),false);
+  var l=$('btn-theme-light'), d=$('btn-theme-dark'), a=$('btn-theme-auto');
+  if(l) l.addEventListener('click',function(){ applyTheme('light',true); toast('Tema pergamena'); });
+  if(d) d.addEventListener('click',function(){ applyTheme('dark',true); toast('Tema grimorio'); });
+  if(a) a.addEventListener('click',function(){ applyTheme('auto',true); toast('Tema automatico'); });
+}
+
+/* ============ tabs ============ */
+function setupTabs(){
+  var valid=['tab-combat','tab-spells','tab-equip','tab-notes'];
+  var btns=document.querySelectorAll('.tabbtn');
+  function activate(id,push){
+    if(valid.indexOf(id)<0) id='tab-combat';
+    document.querySelectorAll('.tab-panel').forEach(function(p){ p.hidden = (p.id!==id); });
+    btns.forEach(function(b){ b.classList.toggle('active',b.getAttribute('data-tab')===id); });
+    if(push){ try{ history.replaceState(null,'','#'+id); }catch(e){ location.hash=id; } }
+    if(push){ window.scrollTo({top:0,behavior:'smooth'}); }
+    if(id==='tab-spells') applySpellFilter();
+    document.querySelectorAll('#'+id+' textarea').forEach(function(ta){ autoGrow(ta); });
+  }
+  btns.forEach(function(b){ b.addEventListener('click',function(){ activate(b.getAttribute('data-tab'),true); }); });
+  var initial=(location.hash||'').replace('#','');
+  activate(valid.indexOf(initial)>=0?initial:'tab-combat',false);
+  window.addEventListener('hashchange',function(){
+    var id=(location.hash||'').replace('#','');
+    if(valid.indexOf(id)>=0) activate(id,false);
+  });
+}
+
+/* ============ portrait ============ */
+function renderPortrait(){
+  var frame=$('portrait-frame'); if(!frame) return;
+  var src=LS.get('vaelin_portrait','') || f('portrait-url','');
+  if(src){
+    frame.innerHTML='<img alt="Ritratto del personaggio" src="'+esc(src)+'">';
+  } else {
+    var name=String(f('s-nome','')||'').trim();
+    frame.innerHTML='<span class="ph">'+esc((name.charAt(0)||'?').toUpperCase())+'</span>';
+  }
+}
+function setupPortrait(){
+  var up=$('btn-portrait-upload'), file=$('portrait-file'), clear=$('btn-portrait-clear');
+  if(up&&file) up.addEventListener('click',function(){ file.click(); });
+  if(file) file.addEventListener('change',function(e){
+    var fl=e.target.files && e.target.files[0];
+    if(!fl) return;
+    var reader=new FileReader();
+    reader.onload=function(){
+      var img=new Image();
+      img.onload=function(){
+        var scale=Math.min(1,400/Math.max(img.width,img.height));
+        var c=document.createElement('canvas');
+        c.width=Math.max(1,Math.round(img.width*scale));
+        c.height=Math.max(1,Math.round(img.height*scale));
+        var ctx=c.getContext('2d');
+        ctx.drawImage(img,0,0,c.width,c.height);
+        try{
+          LS.set('vaelin_portrait',c.toDataURL('image/jpeg',0.82));
+          renderPortrait(); toast('Ritratto salvato');
+        }catch(err){ toast('Immagine troppo grande'); }
+      };
+      img.src=reader.result;
+    };
+    reader.readAsDataURL(fl);
+    e.target.value='';
+  });
+  if(clear) clear.addEventListener('click',function(){
+    LS.del('vaelin_portrait'); setF('portrait-url','');
+    var u=$('portrait-url'); if(u) u.value='';
+    renderPortrait(); toast('Ritratto rimosso');
+  });
+}
+
+/* ---------- dati trascritti dalla scheda cartacea di Vaelin ---------- */
+function seedIfEmpty(){
+  var already = null;
+  try{ already = localStorage.getItem('blank_seed_version'); }catch(e){}
+  if(already === 'vaelin-v1') return;
+
+  var F = {
+    's-nome':'Vaelin "il sognatore"', 's-livello':'7', 's-classe':'Chierico (Dominio della Vita)',
+    's-razza':'High Elf', 's-background':'Accolito / Saggio', 's-allineamento':'Neutrale Buono',
+    's-giocatore':'Di Piazza',
+    'c-comp':'+3', 'c-iniz':'+2', 'c-ca':'28', 'c-vel':'9 m',
+    'c-hpmax':'57', 'c-dv':'7d8 — usati: 0',
+    'c-perc':'14', 'c-indag':'11', 'c-scuro':'18 m',
+    'ds-s3': true, 'ds-f3': true,
+    'ab-for-score':'9', 'ab-for-Atletica':'-1', 'ab-for-save':'-1',
+    'ab-des-score':'14', 'ab-des-Acrobazia':'+2', 'ab-des-Furtività':'+2 (svantaggio armatura)', 'ab-des-Rapiditdimano':'+2', 'ab-des-save':'+2',
+    'ab-cos-score':'16', 'ab-cos-save':'+6',
+    'ab-int-score':'12', 'ab-int-Arcano':'+4', 'ab-int-Indagare':'+1', 'ab-int-Natura':'+1', 'ab-int-Religione':'+4', 'ab-int-Storia':'+4', 'ab-int-save':'+1',
+    'ab-sag-score':'18', 'ab-sag-Addestrareanimali':'+4', 'ab-sag-Intuizione':'+7', 'ab-sag-Medicina':'+4', 'ab-sag-Percezione':'+4', 'ab-sag-Sopravvivenza':'+4', 'ab-sag-save':'+7',
+    'ab-car-score':'8', 'ab-car-Intimidire':'-1', 'ab-car-Inganno':'-1', 'ab-car-Intrattenere':'-1', 'ab-car-Persuasione':'-1', 'ab-car-save':'-1',
+    'sp-cd':'15', 'sp-atk':'+7', 'sp-n':'11', 'sp-carat':'Saggezza',
+    'slot-1':'5', 'slot-2':'3', 'slot-3':'3', 'slot-4':'1', 'slot-5':'0', 'slot-6':'0', 'slot-7':'0', 'slot-8':'0', 'slot-9':'0',
+    'g-mo':'4544', 'g-gemme':'4 diamanti da 300 mo',
+    'w-ing':'22,5', 'w-ingp':'45', 'w-max':'67,5', 'w-spinta':'135',
+    'n-tratti':'Sono una mente brillante e pragmatica. Le regole e la burocrazia non mi interessano se mi impediscono di fare la cosa giusta.',
+    'n-ideali':'Compassione.',
+    'n-legami':'Il mio gruppo sono gli unici amici stabili che si siano mai presi cura di me. Farò qualsiasi cosa per assicurarmi che restino al mio fianco.',
+    'n-difetti':'Sono arrogante. Credo che la mia intelligenza sia superiore e mi do il diritto di aggirare le leggi o meritare l\'autorità quando lo ritengo necessario.',
+    'n-nemici':'Gabriele Varani, Matteo Hejiamo, Rayan Torricelli, Mattia Bergamaschi.',
+    'n-divinita':'Lathander (Buono)', 'n-dominio':'Dominio della Vita',
+    'n-eta':'220 anni', 'n-sesso':'M', 'n-altezza':'2 m', 'n-peso':'66 kg',
+    'n-capelli':'Biondi', 'n-occhi':'Marroni', 'n-carnagione':'Bianca'
+  };
+  Object.keys(F).forEach(function(k){ LS.set('blank_f_'+k, F[k]); });
+  LS.set('blank_profs', {'Scudi':true, 'Armi semplici':true});
+
+  function mk(name, meta, desc){ return {name:name, meta:meta||'', desc:desc||'', _open:false}; }
+  function sp(name, meta, desc, prepared){ var o = mk(name, meta, desc); o.prepared = !!prepared; return o; }
+
+  LS.set('blank_l_weapons', [
+    { name:'Pugnale Rituale Elfico', atk:'+5', dmg:'1d4+2 perforanti', range:'', weight:'1 kg',
+      desc:'Pugnale cerimoniale elfico. Arma semplice da mischia, leggera e con la proprietà finezza (puoi usare Destrezza al posto di Forza per i tiri per colpire e per i danni), lanciabile a distanza ravvicinata. Dato il bonus di attacco riportato, è probabilmente un\'arma magica +1 o +2.', _open:false }
+  ]);
+
+  LS.set('blank_l_armor', [
+    mk('Armatura Pelle di Adamantio','23 CA base','Armatura magica realizzata in adamantio. Mentre la indossi, qualsiasi colpo critico messo a segno contro di te viene trattato come un colpo normale (l\'attaccante non raddoppia i dadi danno).'),
+    mk('Scudo','+3 CA, 1 uso gratuito al giorno, 5 kg','Scudo magico che garantisce +3 alla Classe Armatura quando impugnato (oltre al normale +2 di uno scudo base). Una volta al giorno puoi lanciare l\'incantesimo Scudo (Shield) come reazione gratuita, senza consumare uno slot incantesimo.'),
+    mk('Bracciale','+2 CA','Bracciale magico che garantisce +2 alla Classe Armatura mentre indossato.')
+  ]);
+
+  LS.set('blank_l_perks', [
+    mk('Vantaggio ai TS di Costituzione per la concentrazione','', 'Hai vantaggio ai tiri salvezza su Costituzione effettuati per mantenere la concentrazione su un incantesimo quando subisci danno (privilegio del talento Incantatore da Guerra).'),
+    mk('Vantaggio ai TS contro essere affascinato e contro la morte','', 'Hai vantaggio ai tiri salvezza per resistere a essere affascinato (tratto razziale Retaggio Fatato) e, probabilmente da un oggetto magico o privilegio di classe, ai tiri salvezza contro la morte.'),
+    mk('Amuleto del Devoto +1','', 'Amuleto magico indossato come simbolo sacro. Garantisce +1 ai tiri per colpire con incantesimi e +1 ai tiri salvezza.'),
+    mk('Anello della Libertà di Azione','', 'Mentre indossi questo anello, non puoi essere paralizzato, intrappolato (ad esempio da ragnatele o Mani Agghiaccianti) o rallentato da effetti magici, e nuotare non ti costa movimento extra.')
+  ]);
+
+  LS.set('blank_l_classfeat', [
+    mk('Discepolo della Vita','1° livello, Dominio della Vita','Ogni volta che usi un incantesimo di 1° livello o superiore per ripristinare punti ferita a una creatura, quella creatura recupera punti ferita aggiuntivi pari a 2 + il livello dell\'incantesimo usato.'),
+    mk('Incanalare Divinità (3 usi, si ricaricano con un riposo breve o lungo)','',
+      'Scacciare i Non Morti: come azione, presenti il tuo simbolo sacro e reciti una preghiera di condanna. Ogni non morto entro 9 metri che possa vederti o sentirti deve superare un tiro salvezza su Saggezza o essere scacciato per 1 minuto o finché non subisce danno.\n\nPreservare la Vita: come azione, presenti il simbolo sacro ed evochi energia curativa che puoi distribuire tra una o più creature entro 9 metri, te stesso incluso. Il totale di punti ferita curabili è pari a 5 × il tuo livello da chierico (35 PF al livello 7). Nessuna creatura può ricevere più della metà dei suoi punti ferita massimi. L\'energia non ha effetto su non morti o costrutti.'),
+    mk('Chierico dell\'Ordine Divino','', 'Privilegio legato al tuo ordine religioso: concede competenze aggiuntive (tipicamente in un\'abilità e in un tipo di strumento, oppure nella lingua Celestiale) in base a come sei stato formato nel tuo tempio.'),
+    mk('Scintilla Divina','', 'Puoi usare Incanalare Divinità per scagliare una scintilla di energia divina. Come azione, scegli una creatura entro 18 metri: se è ostile, deve superare un tiro salvezza su Costituzione o subire 1d8 + il tuo modificatore di Saggezza danni divini; se è amica, recupera 1d8 + il tuo modificatore di Saggezza punti ferita. Si ricarica con un riposo breve o lungo.'),
+    mk('Guadagno Benedetto','', 'Ogni volta che curi un\'altra creatura con un incantesimo o un\'abilità, curi anche te stesso di un numero di punti ferita pari a 2 + il tuo livello da incantatore.')
+  ]);
+
+  LS.set('blank_l_racetraits', [
+    mk('Scurovisione','18 m', 'Sei abituato a vivere nell\'oscurità. Entro 18 metri puoi vedere nella penombra come se fosse luce piena, e nel buio come se fosse penombra. Nel buio non puoi distinguere i colori, solo sfumature di grigio.'),
+    mk('Trance','4 ore di meditazione al posto di 8 ore di sonno', 'Gli elfi non dormono. Meditano in uno stato semi-cosciente per 4 ore al giorno. Dopo aver riposato in questo modo ottieni lo stesso beneficio che un umano otterrebbe da 8 ore di sonno.'),
+    mk('Retaggio Fatato','', 'Hai vantaggio ai tiri salvezza contro essere affascinato, e la magia non può farti addormentare.'),
+    mk('Magia Elfica','', 'Conosci un trucchetto arcano aggiuntivo a tua scelta (tipicamente dalla lista degli incantesimi del mago). Al 3° livello puoi lanciare una volta al giorno, senza consumare uno slot, un incantesimo di 1° livello scelto dalla stessa lista; dal 5° livello in poi puoi usare la Saggezza, l\'Intelligenza o il Carisma (a tua scelta) come caratteristica da incantatore per questo incantesimo.')
+  ]);
+
+  LS.set('blank_l_feats', [
+    mk('Incantatore da Guerra','', 'Hai vantaggio ai tiri salvezza su Costituzione per mantenere la concentrazione su un incantesimo. Puoi eseguire le componenti gestuali di un incantesimo anche se hai armi o uno scudo in entrambe le mani. Quando una creatura provoca da te un attacco di opportunità lanciando un incantesimo, puoi usare la tua reazione per lanciare un trucchetto contro di essa, invece di effettuare un attacco con l\'arma.'),
+    mk('Iniziato alla Magia','2 trucchetti + 1 incantesimo di 1° livello', 'Impari due trucchetti a tua scelta da una lista di incantesimi (nel tuo caso, quella del chierico). Impari inoltre un incantesimo di 1° livello da quella stessa lista: puoi lanciarlo una volta senza spendere uno slot, recuperando questa possibilità dopo un riposo lungo; puoi anche lanciarlo usando normali slot incantesimo, se ne hai.')
+  ]);
+
+  LS.set('blank_l_inv', [
+    mk('Amuleto del Devoto +1','Indossato · 0,5 kg'),
+    mk('Pozioni sconosciute','Zaino · 5 × 2,5 kg','Non ancora identificate: vanno bevute o analizzate con Individuazione del Magico/Identificazione per scoprirne l\'effetto.'),
+    mk('Pergamene sconosciute','Zaino · 3 × 0,3 kg','Non ancora identificate.'),
+    mk('Pozione di Cura Maggiore','8d4+4 PF curati · 2 × 1 kg','Bevuta come azione, ripristina 8d4+4 punti ferita.'),
+    mk('Pelliccia di Cervo','1 kg'),
+    mk('Pergamena di Rigenerazione','2 × 0,3 kg','Pergamena incantata contenente l\'incantesimo Rigenerazione: letta ad alta voce, cura ferite gravi e può far ricrescere arti perduti nel tempo.'),
+    mk('Pergamene di Resurrezione','6 × 3 kg','Contengono l\'incantesimo Resurrezione: possono riportare in vita una creatura morta da non più di 100 anni, purché l\'anima sia disposta e libera.'),
+    mk('Pergamena di Depietrificazione','1 × 0,3 kg','Contiene l\'incantesimo Pietra in Carne (Stone to Flesh): riporta allo stato normale una creatura pietrificata.'),
+    mk('Libro di Geografia sul dominio','1'),
+    mk('Libro sui Mostri del Regno','1'),
+    mk('Cartina Geografica del Dominio','1')
+  ]);
+
+  LS.set('blank_l_langs', [ mk('Comune'), mk('Elfico'), mk('Abissale'), mk('Celestiale') ]);
+
+  LS.set('blank_l_sp0', [
+    sp('Pedaggio dei Morti','10 m · TS Saggezza · 2d8/2d12 necrotici',
+      'Trucchetto di Necromanzia. Tempo di lancio: 1 azione. Gittata: 10 metri. Componenti: V, S. Durata: istantanea.\n\nIndichi un bersaglio a portata in punti ferita. Il bersaglio deve superare un tiro salvezza su Saggezza oppure essere avvolto da un suono spettrale di lamenti, udibile solo a lui, fino all\'inizio del tuo prossimo turno. Se fallisce il TS, subisce 2d8 danni necrotici (2d12 se il bersaglio ha già subito una ferita, cioè non è al massimo dei PF); se lo supera, subisce metà del danno e nessun altro effetto. Il danno è già scalato per il tuo livello di incantatore (7°).'),
+    sp('Parola Radiosa','Raggio 1,5 m · TS Costituzione · 2d6 radiosi',
+      'Trucchetto di Evocazione. Tempo di lancio: 1 azione. Gittata: te stesso (raggio 1,5 metri). Componenti: V, M (un simbolo sacro). Durata: istantanea.\n\nPunti di luce accecante emanano da te. Ogni creatura ostile a tua scelta entro 1,5 metri da te deve superare un tiro salvezza su Costituzione o subire 2d6 danni radiosi (già scalato per il livello 7).'),
+    sp('Guida','Contatto · concentrazione 1 min',
+      'Trucchetto di Divinazione. Tempo di lancio: 1 azione. Gittata: contatto. Componenti: V, S. Durata: concentrazione, fino a 1 minuto.\n\nTocchi una creatura volontaria. Una volta prima che l\'incantesimo finisca, il bersaglio può tirare 1d4 e aggiungerlo a una prova di caratteristica a sua scelta, prima o dopo averla effettuata. L\'incantesimo termina dopo l\'uso.'),
+    sp('Taumaturgia','9 m · fino a 1 min',
+      'Trucchetto di Trasmutazione. Tempo di lancio: 1 azione. Gittata: 9 metri. Componenti: V. Durata: fino a 1 minuto.\n\nManifesti un segno minore di potere divino: a scelta, la tua voce rimbomba fino a 3 volte più forte per 1 minuto; fai tremolare fiamme; apri o chiudi bruscamente porte e finestre; alteri per un istante il volume di un suono; fai tremare il terreno per un istante; crei un\'istantanea immagine innocua di luce, fumo o scintille; fai scattare serrature non chiuse a chiave; alteri il colore dei tuoi occhi per 1 minuto. Puoi mantenere attivi fino a 3 effetti contemporaneamente lanciando l\'incantesimo più volte, e terminarne uno come azione.'),
+    sp('Raggio di Gelo','18 m · attacco con incantesimo · 2d8 freddo',
+      'Trucchetto di Evocazione. Tempo di lancio: 1 azione. Gittata: 18 metri. Componenti: V, S. Durata: istantanea.\n\nUn raggio di luce blu-bianca scocca verso una creatura a portata. Effettua un attacco con incantesimo a distanza: se colpisci, il bersaglio subisce 2d8 danni da freddo (già scalato per il livello 7) e la sua velocità si riduce di 3 metri fino all\'inizio del tuo prossimo turno.'),
+    sp('Mano Magica','9 m · 1 min',
+      'Trucchetto di Trasmutazione. Tempo di lancio: 1 azione. Gittata: 9 metri. Componenti: V, S. Durata: 1 minuto.\n\nUna mano spettrale fluttuante appare in un punto a scelta entro gittata. Puoi controllarla come azione bonus per manipolare un oggetto, aprire/chiudere una porta o un contenitore non chiusi a chiave, riporre o prendere un oggetto da un contenitore aperto, o versare il contenuto di una fiala. Non può attaccare, attivare oggetti magici né trasportare più di 4,5 kg.'),
+    sp('Illusione Minore','9 m · 1 min',
+      'Trucchetto di Illusione. Tempo di lancio: 1 azione. Gittata: 9 metri. Componenti: S, M (un pezzetto di lana). Durata: 1 minuto.\n\nCrei un suono o un\'immagine visiva statica di un oggetto (non più grande di un cubo di 1,5 m) entro gittata. Il suono può variare da un sussurro a un grido e, se sono parole, devono essere in una lingua che conosci. L\'immagine non produce suono, luce, odore o altri effetti sensoriali; interagire fisicamente con essa rivela l\'illusione.')
+  ]);
+
+  LS.set('blank_l_sp1', [
+    sp('Scudo','Reazione · +5 CA fino al prossimo turno · 1 uso gratuito al giorno',
+      'Abiurazione, 1° livello. Tempo di lancio: 1 reazione, quando sei colpito da un attacco o bersaglio di Dardo Incantato. Gittata: te stesso. Componenti: V, S. Durata: 1 round.\n\nUna barriera invisibile di forza magica ti protegge: fino all\'inizio del tuo prossimo turno hai +5 alla Classe Armatura, incluso contro l\'attacco che ha scatenato l\'incantesimo, e non subisci danni da Dardo Incantato. Il tuo talento Incantatore da Guerra o un oggetto magico ti permette di lanciarlo gratuitamente una volta al giorno.', true),
+    sp('Benedizione','9 m · concentrazione 1 min · 3 bersagli',
+      'Incantamento, 1° livello. Tempo di lancio: 1 azione. Gittata: 9 metri. Componenti: V, S, M (un aspersorio). Durata: concentrazione, fino a 1 minuto.\n\nBenedici fino a tre creature a tua scelta entro gittata. Ogni volta che un bersaglio effettua un tiro per colpire o un tiro salvezza prima che l\'incantesimo finisca, può tirare 1d4 e aggiungerlo al risultato.', true),
+    sp('Cura Ferite','Contatto · 2d8+4+3',
+      'Evocazione, 1° livello. Tempo di lancio: 1 azione. Gittata: contatto. Componenti: V, S. Durata: istantanea.\n\nUna creatura che tocchi recupera 1d8 + il tuo modificatore di Saggezza punti ferita. Non ha effetto su non morti o costrutti. Con Discepolo della Vita (Dominio della Vita) il totale aumenta di 2 + il livello dell\'incantesimo, e con Guadagno Benedetto curi anche te stesso.', true),
+    sp('Parola Guaritrice','Azione bonus · 18 m · 1d4+3',
+      'Evocazione, 1° livello. Tempo di lancio: 1 azione bonus. Gittata: 18 metri. Componenti: V. Durata: istantanea.\n\nUna creatura a tua scelta che vedi entro gittata recupera 1d4 + il tuo modificatore di Saggezza punti ferita. Non ha effetto su non morti o costrutti.', false),
+    sp('Santuario','Azione bonus · 9 m · 1 min',
+      'Abiurazione, 1° livello. Tempo di lancio: 1 azione bonus. Gittata: 9 metri. Componenti: V, S, M (uno specchietto). Durata: 1 minuto.\n\nDesigni una creatura volontaria come protetta: ogni creatura che la bersaglia con un attacco o un incantesimo dannoso deve prima superare un TS su Saggezza, altrimenti deve scegliere un nuovo bersaglio o perdere l\'azione. Non protegge da effetti ad area. L\'incantesimo termina se il protetto attacca, lancia un incantesimo offensivo o causa danni.', true),
+    sp('Raggio Guida','36 m · attacco con incantesimo · 4d6 radiosi',
+      'Evocazione, 1° livello. Tempo di lancio: 1 azione. Gittata: 36 metri. Componenti: V, S. Durata: 1 round.\n\nUn raggio di luce fiammeggiante scocca verso un bersaglio a portata. Effettua un attacco con incantesimo a distanza: se colpisci, il bersaglio subisce 4d6 danni radiosi, e il prossimo attacco contro di esso da chiunque altro, prima della fine del tuo prossimo turno, ha vantaggio.', true),
+    sp('Infliggere Ferite','Contatto · attacco con incantesimo in mischia · 3d10 necrotici',
+      'Necromanzia, 1° livello. Tempo di lancio: 1 azione. Gittata: contatto. Componenti: V, S. Durata: istantanea.\n\nEffettua un attacco con incantesimo in mischia contro una creatura a portata della tua mano. Se colpisci, il bersaglio subisce 3d10 danni necrotici.', true),
+    sp('Comando','18 m · TS Saggezza · 1 round',
+      'Incantamento, 1° livello. Tempo di lancio: 1 azione. Gittata: 18 metri. Componenti: V. Durata: 1 round.\n\nPronunci una parola di comando a una creatura che vedi entro gittata. Deve superare un TS su Saggezza o seguire il comando al suo prossimo turno (es. Avvicinati, Cadi, Fuggi, Mollalo, Fermo). Non ha effetto su non morti, su chi non capisce la tua lingua o se il comando è palesemente autolesivo.', true),
+    sp('Scudo della Fede','Azione bonus · 18 m · concentrazione 10 min · +2 CA (anche a un alleato)',
+      'Abiurazione, 1° livello. Tempo di lancio: 1 azione bonus. Gittata: 18 metri. Componenti: V, S, M (un piccolo amuleto d\'argento). Durata: concentrazione, fino a 10 minuti.\n\nUn campo di energia protettiva circonda una creatura a tua scelta entro gittata, concedendole +2 alla Classe Armatura per la durata.', true)
+  ]);
+
+  LS.set('blank_l_sp2', [
+    sp('Passo Velato','Azione bonus · teletrasporto 9 m',
+      'Convocazione, 2° livello. Tempo di lancio: 1 azione bonus. Gittata: te stesso. Componenti: V. Durata: istantanea.\n\nAvvolto brevemente da una nebbia argentea, ti teletrasporti fino a 9 metri in un punto libero che puoi vedere.', true),
+    sp('Aiuto','9 m · +5 PF massimi a 3 alleati · 8 ore',
+      'Abiurazione, 2° livello. Tempo di lancio: 1 azione. Gittata: 9 metri. Componenti: V, S, M (un pezzetto di filo d\'argento). Durata: 8 ore.\n\nScegli fino a tre creature entro gittata: i loro punti ferita massimi e attuali aumentano di 5 per la durata dell\'incantesimo.', true),
+    sp('Ristorare Inferiore','Contatto',
+      'Abiurazione, 2° livello. Tempo di lancio: 1 azione. Gittata: contatto. Componenti: V, S. Durata: istantanea.\n\nTocchi una creatura e puoi porre fine a una condizione che la affligge: accecato, paralizzato, avvelenato, sordo, oppure la riduzione di una caratteristica (indebolito).', true),
+    sp('Arma Spirituale','Azione bonus · 18 m · 1d8+mod. Saggezza forza',
+      'Evocazione, 2° livello. Tempo di lancio: 1 azione bonus. Gittata: 18 metri. Componenti: V, S, M (simbolo sacro). Durata: 1 minuto.\n\nCrei un\'arma spettrale fluttuante entro gittata. Al lancio, e poi come azione bonus nei turni successivi, puoi attaccare con essa (muovendola fino a 6 metri prima) contro una creatura entro 1,5 metri da essa: attacco con incantesimo in mischia, 1d8 + modificatore di Saggezza danni di forza se colpisci.', true),
+    sp('Preghiera di Guarigione','10 min · 9 m · 6 bersagli · 2d8+4 (+2+livello incantatore con Dominio della Vita)',
+      'Evocazione, 2° livello. Tempo di lancio: 10 minuti. Gittata: 9 metri. Componenti: V. Durata: istantanea.\n\nFino a sei creature a tua scelta entro gittata recuperano 2d8 + il tuo modificatore di Saggezza punti ferita (con Discepolo della Vita, +2 ulteriori per ciascuna).', false),
+    sp('Cecità/Sordità','9 m · TS Costituzione · accecato o sordo, 1 min',
+      'Necromanzia, 2° livello. Tempo di lancio: 1 azione. Gittata: 9 metri. Componenti: V. Durata: 1 minuto.\n\nScegli una creatura che vedi entro gittata: deve superare un TS su Costituzione o essere accecata o sorda (a tua scelta) per la durata. Alla fine di ogni suo turno può ripetere il TS, terminando l\'effetto su un successo. Mentre è accecato, il bersaglio ha svantaggio ai tiri per colpire e chi lo attacca ha vantaggio.', true)
+  ]);
+
+  LS.set('blank_l_sp3', [
+    sp('Scopri Magie','Rituale · 1 uso gratuito al giorno',
+      'Divinazione (rituale), 3° livello. Tempo di lancio: 1 azione. Gittata: te stesso. Componenti: V, S. Durata: concentrazione, fino a 10 minuti.\n\nPer la durata percepisci la presenza di magia entro 9 metri da te. Puoi usare la tua azione per vedere un\'aura attorno a creature o oggetti magici nell\'area e apprenderne la scuola di magia.', true),
+    sp('Rianimazione','Contatto · entro 1 minuto dalla morte · consuma diamanti da 300 mo',
+      'Necromanzia, 3° livello. Tempo di lancio: 1 azione. Gittata: contatto. Componenti: V, S, M (diamanti dal valore di 300 mo, consumati). Durata: istantanea.\n\nTocchi una creatura morta da non più di 1 minuto: torna in vita con 1 punto ferita. Non funziona su chi è morto per vecchiaia e non ripristina parti del corpo mancanti.', true),
+    sp('Parola Guaritrice di Massa','Azione bonus · 18 m · 1d4+5 · più bersagli',
+      'Evocazione, 3° livello. Tempo di lancio: 1 azione bonus. Gittata: 18 metri. Componenti: V. Durata: istantanea.\n\nFino a sei creature a tua scelta entro gittata recuperano 1d4 + il tuo modificatore di Saggezza punti ferita.', true),
+    sp('Spiriti Guardiani','Raggio 4,5 m · TS Saggezza · 3d8 radiosi/necrotici · dimezza il movimento',
+      'Convocazione, 3° livello. Tempo di lancio: 1 azione. Gittata: te stesso (raggio 4,5 metri). Componenti: V, S, M (simbolo sacro). Durata: concentrazione, fino a 10 minuti.\n\nSpiriti evocati fiancheggiano te in un raggio di 4,5 metri. Al lancio puoi designare alleati immuni. Ogni altra creatura che entra per la prima volta nell\'area in un turno, o che inizia lì il suo turno, deve superare un TS su Saggezza o subire 3d8 danni radiosi o necrotici (a tua scelta al lancio) e avere il movimento dimezzato per quel turno; con successo, danno dimezzato e nessun effetto sul movimento. La tua velocità è ridotta della metà mentre sei nell\'area degli spiriti.', true),
+    sp('Dissolvi Magie','36 m',
+      'Abiurazione, 3° livello. Tempo di lancio: 1 azione. Gittata: 36 metri. Componenti: V, S. Durata: istantanea.\n\nScegli una creatura, un oggetto o un effetto magico entro gittata: ogni incantesimo di 3° livello o inferiore su di esso termina. Per incantesimi di livello 4° o superiore, effettua una prova di abilità da incantatore (1d20 + modificatore) contro CD 10 + livello dell\'incantesimo; in caso di successo, termina.', false),
+    sp('Faro di Speranza','9 m · concentrazione 1 min · vantaggio ai TS Saggezza e alle cure ricevute',
+      'Abiurazione, 3° livello. Tempo di lancio: 1 azione. Gittata: 9 metri. Componenti: V, S. Durata: concentrazione, fino a 1 minuto.\n\nUna o più creature a tua scelta entro gittata ottengono vantaggio ai tiri salvezza su Saggezza e ai tiri per determinare i punti ferita recuperati da qualsiasi cura.', true),
+    sp('Scagliare Maledizione','Contatto · TS Saggezza · concentrazione 1 min',
+      'Necromanzia, 3° livello. Tempo di lancio: 1 azione. Gittata: contatto. Componenti: V, S. Durata: concentrazione, fino a 1 minuto.\n\nTocchi una creatura, che deve superare un TS su Saggezza o essere maledetta. Scegli un effetto al lancio: svantaggio alle prove o ai tiri per colpire che usano una caratteristica scelta; svantaggio ai tiri per colpire contro di te; TS su Saggezza all\'inizio di ogni suo turno o spreca l\'azione; oppure, quando colpisce con un attacco o un incantesimo, subisce 1d8 danni necrotici aggiuntivi.', true)
+  ]);
+
+  LS.set('blank_l_sp4', [
+    sp('Interdizione della Morte','Contatto · 8 ore',
+      'Abiurazione, 4° livello. Tempo di lancio: 1 azione. Gittata: contatto. Componenti: V, S. Durata: 8 ore.\n\nTocchi una creatura volontaria: la prima volta che subirebbe danni sufficienti a ridurla a 0 PF mentre l\'incantesimo è attivo, scende invece a 1 PF, e l\'incantesimo termina.', false),
+    sp('Guardiano della Fede','9 m · 8 ore',
+      'Convocazione, 4° livello. Tempo di lancio: 1 azione. Gittata: 9 metri. Componenti: V. Durata: 8 ore.\n\nUn grande guardiano spettrale appare in un punto a scelta entro gittata e resta finché non è ridotto a 0 PF o finché non scade la durata. Ogni creatura ostile che si muove per la prima volta nel suo turno entro 3 metri dal guardiano deve superare un TS su Destrezza o subire 20 danni radiosi; una volta inflitti 60 PF totali, il guardiano sparisce.', false),
+    sp('Esilio','18 m · TS Carisma · concentrazione 1 min',
+      'Abiurazione, 4° livello. Tempo di lancio: 1 azione. Gittata: 18 metri. Componenti: V, S, M (un oggetto d\'argento del valore di almeno 1000 mo). Durata: concentrazione, fino a 1 minuto.\n\nUna creatura che vedi entro gittata deve superare un TS su Carisma o essere trasportata in un\'altra dimensione tascabile (o nel suo piano natio, se non è nativa del Piano Materiale), incapace di agire o essere percepita qui finché l\'incantesimo dura. Se termina prima, ricompare nello spazio lasciato libero o nel più vicino disponibile.', true)
+  ]);
+
+  try{ localStorage.setItem('blank_seed_version', 'vaelin-v1'); }catch(e){}
+}
+/* ============ cloud sync (GitHub Gist) ============ */
+var CLOUD = { token:'', gist:'', last:'' };
+var pushing=false, pendingPush=false;
+function loadCloud(){
+  CLOUD.token=LS.get('vaelin_cloud_token','')||'';
+  CLOUD.gist=LS.get('vaelin_cloud_gist','')||'';
+  CLOUD.last=LS.get('vaelin_cloud_ts','')||'';
+}
+function cloudConfigured(){ return !!(CLOUD.token && CLOUD.gist); }
+var lastSyncState='off', lastSyncText='Locale';
+function setSync(state,text){
+  lastSyncState=state; lastSyncText=text;
+  var b=$('btn-cloud'); if(b) b.setAttribute('data-state',state);
+  var t=$('sync-txt');
+  if(t){
+    if(window.innerWidth<=640){
+      t.textContent = state==='saving' ? '…' : state==='ok' ? '✓' : state==='off' ? 'Locale' : text;
+      t.title=text;
+    } else {
+      t.textContent=text;
+      t.removeAttribute('title');
+    }
+  }
+}
+function updateLocalTs(){
+  var el=$('local-ts');
+  if(el){
+    var ts=LS.get('vaelin_local_ts','');
+    el.textContent = ts ? new Date(ts).toLocaleString('it-IT') : '—';
+  }
+  var ss=$('seed-state');
+  if(ss){
+    var seeded=false;
+    try{ seeded = localStorage.getItem('blank_seed_version')==='vaelin-v1'; }catch(e){}
+    ss.textContent = seeded ? 'Preset Vaelin caricato' : 'Scheda vuota';
+  }
+}
+function updateCloudState(msg){
+  var el=$('cloud-state'); if(!el) return;
+  var gi=$('cloud-gist'); if(gi && !gi.value && CLOUD.gist) gi.value=CLOUD.gist;
+  var ti=$('cloud-token'); if(ti && !ti.value && CLOUD.token) ti.value=CLOUD.token;
+  if(!cloudConfigured()){
+    el.textContent='Cloud non configurato: i dati restano solo su questo dispositivo.';
+    return;
+  }
+  var last=CLOUD.last?new Date(CLOUD.last).toLocaleString('it-IT'):'mai';
+  el.innerHTML='Gist: <b>'+esc(CLOUD.gist)+'</b> · Ultimo sync: '+esc(last)+(msg?(' · '+esc(msg)):'');
+}
+function onDirty(){
+  LS.rawSet('vaelin_local_ts',new Date().toISOString());
+  updateLocalTs();
+  if(!cloudConfigured()){ setSync('off','Locale'); return; }
+  setSync('saving','Salvataggio...');
+  clearTimeout(dirtyTimer);
+  dirtyTimer=setTimeout(function(){ pushCloud(); },1500);
+}
+function collectBackup(){
+  var data={};
+  LS.keys().forEach(function(k){
+    if(k==='vaelin_cloud_token') return;
+    if(k.indexOf('blank_')===0 || k.indexOf('vaelin_')===0) data[k]=LS.get(k,null);
+  });
+  return { app:'vaelin-scheda', version:2, exportedAt:new Date().toISOString(), data:data };
+}
+function applyBackup(obj){
+  var data = obj && obj.data ? obj.data : obj;
+  if(!data || typeof data!=='object') throw new Error('Formato backup non valido');
+  suppressDirty=true;
+  Object.keys(data).forEach(function(k){
+    if(k==='vaelin_cloud_token') return;
+    if(k.indexOf('blank_')===0 || k.indexOf('vaelin_')===0) LS.set(k,data[k]);
+  });
+  suppressDirty=false;
+}
+function pushCloud(){
+  if(!cloudConfigured()){ setSync('off','Locale'); return; }
+  if(pushing){ pendingPush=true; return; }
+  pushing=true;
+  setSync('saving','Salvataggio...');
+  var content=JSON.stringify(collectBackup());
+  var headers={ 'Authorization':'token '+CLOUD.token, 'Accept':'application/vnd.github+json', 'Content-Type':'application/json' };
+  var url, opts;
+  if(!CLOUD.gist){
+    url='https://api.github.com/gists';
+    opts={ method:'POST', headers:headers, body:JSON.stringify({ description:'Scheda D&D 5e (auto-sync)', public:false, files:{ 'scheda-dnd.json':{ content:content } } }) };
+  } else {
+    url='https://api.github.com/gists/'+encodeURIComponent(CLOUD.gist);
+    opts={ method:'PATCH', headers:headers, body:JSON.stringify({ files:{ 'scheda-dnd.json':{ content:content } } }) };
+  }
+  fetch(url,opts).then(function(r){
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    return r.json();
+  }).then(function(j){
+    if(!CLOUD.gist && j && j.id){
+      CLOUD.gist=j.id;
+      LS.rawSet('vaelin_cloud_gist',CLOUD.gist);
+      var gi=$('cloud-gist'); if(gi) gi.value=CLOUD.gist;
+    }
+    CLOUD.last=new Date().toISOString();
+    LS.rawSet('vaelin_cloud_ts',CLOUD.last);
+    setSync('ok','Sincronizzato ✓');
+    updateCloudState();
+    pushing=false;
+    if(pendingPush){ pendingPush=false; pushCloud(); }
+  }).catch(function(err){
+    pushing=false;
+    setSync('off','Offline · locale');
+    updateCloudState('Errore: '+err.message);
+  });
+}
+function pullCloud(thenPush){
+  if(!cloudConfigured()){ setSync('off','Locale'); return; }
+  setSync('saving','Controllo...');
+  fetch('https://api.github.com/gists/'+encodeURIComponent(CLOUD.gist),{
+    headers:{ 'Authorization':'token '+CLOUD.token, 'Accept':'application/vnd.github+json' }
+  }).then(function(r){
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    return r.json();
+  }).then(function(j){
+    var file = j.files && (j.files['scheda-dnd.json'] || j.files['scheda-vaelin.json'] || j.files[Object.keys(j.files)[0]]);
+    if(!file || !file.content){
+      setSync('ok','Sincronizzato ✓');
+      if(thenPush) pushCloud();
+      return;
+    }
+    var remote=JSON.parse(file.content);
+    var remoteTs=j.updated_at || remote.exportedAt || '';
+    var localTs=CLOUD.last||'';
+    var newer = remoteTs && (!localTs || new Date(remoteTs) > new Date(localTs));
+    if(newer){
+      applyBackup(remote);
+      LS.rawSet('vaelin_cloud_ts',remoteTs);
+      setSync('ok','Aggiornato dal cloud');
+      updateCloudState('Aggiornato dal cloud');
+      toast('Scheda aggiornata dal cloud');
+      setTimeout(function(){ location.reload(); },900);
+    } else {
+      setSync('ok','Sincronizzato ✓');
+      updateCloudState();
+      if(thenPush) pushCloud();
+    }
+  }).catch(function(err){
+    setSync('off','Offline · locale');
+    updateCloudState('Errore: '+err.message);
+  });
+}
+function setupCloud(){
+  updateCloudState();
+  setSync(cloudConfigured()?'ok':'off',cloudConfigured()?'Cloud':'Locale');
+  var save=$('btn-cloud-save'), sync=$('btn-cloud-sync'), off=$('btn-cloud-off'), open=$('btn-cloud');
+  if(save) save.addEventListener('click',function(){
+    var t=$('cloud-token'), g=$('cloud-gist');
+    CLOUD.token=t?t.value.trim():'';
+    CLOUD.gist=g?g.value.trim():'';
+    if(!CLOUD.token){ toast('Inserisci il Personal Access Token'); return; }
+    LS.rawSet('vaelin_cloud_token',CLOUD.token);
+    LS.rawSet('vaelin_cloud_gist',CLOUD.gist);
+    if(!CLOUD.gist) toast('Creo un nuovo Gist segreto...');
+    pushCloud();
+  });
+  if(sync) sync.addEventListener('click',function(){ pullCloud(true); });
+  if(off) off.addEventListener('click',function(){
+    if(!window.confirm('Disconnettere il cloud? I dati restano sul dispositivo.')) return;
+    CLOUD={token:'',gist:'',last:''};
+    LS.del('vaelin_cloud_token'); LS.del('vaelin_cloud_gist'); LS.del('vaelin_cloud_ts');
+    var t=$('cloud-token'), g=$('cloud-gist'); if(t)t.value=''; if(g)g.value='';
+    setSync('off','Locale'); updateCloudState(); toast('Cloud disconnesso');
+  });
+  if(open) open.addEventListener('click',function(){ openSettings(true); });
+}
+
+/* ============ export / import ============ */
+function exportJSON(){
+  try{
+    var json=JSON.stringify(collectBackup(),null,2);
+    var blob=new Blob([json],{type:'application/json'});
+    var url=URL.createObjectURL(blob);
+    var a=document.createElement('a');
+    a.href=url; a.download='scheda-dnd.json';
+    document.body.appendChild(a); a.click();
+    setTimeout(function(){ URL.revokeObjectURL(url); if(a.parentNode) a.parentNode.removeChild(a); },600);
+    toast('Backup JSON esportato');
+  }catch(e){ toast('Export non riuscito: '+e.message); }
+}
+function importJSON(file){
+  var reader=new FileReader();
+  reader.onload=function(){
+    try{
+      var obj=JSON.parse(reader.result);
+      applyBackup(obj);
+      toast('Backup importato: ricarico la scheda...');
+      setTimeout(function(){ location.reload(); },700);
+    }catch(e){ toast('File non valido: '+e.message); }
+  };
+  reader.readAsText(file);
+}
+
+/* ============ settings modal ============ */
+function openSettings(cloudFocus){
+  var m=$('modal-settings'); if(!m) return;
+  m.hidden=false;
+  document.body.style.overflow='hidden';
+  updateCloudState();
+  if(cloudFocus){
+    var cs=$('cloud-section');
+    if(cs) setTimeout(function(){ cs.scrollIntoView({block:'start',behavior:'smooth'}); },60);
+  }
+}
+function closeSettings(){
+  var m=$('modal-settings'); if(!m) return;
+  m.hidden=true;
+  document.body.style.overflow='';
+}
+function clearAllSheetData(){
+  LS.keys().forEach(function(k){
+    if(k.indexOf('blank_')===0 || k.indexOf('vaelin_')===0){
+      try{ localStorage.removeItem(k); }catch(e){}
+    }
+  });
+}
+/* Maps the legacy keys written by seedIfEmpty() onto the new editable fields. */
+function hydrateVaelinLegacy(){
+  [['c-ca','c-ca-x'],['c-iniz','c-iniz-x'],['c-comp','c-comp-x'],
+   ['c-perc','passive-perc'],['c-indag','passive-indag'],
+   ['sp-cd','sp-dc'],['sp-atk','sp-atk-val']].forEach(function(m){
+    var v=f(m[0],'');
+    if(String(v).trim()!=='') setF(m[1],v);
+  });
+  var hd=/(\d+)d(\d+)/i.exec(String(f('c-dv','')));
+  if(hd){ setF('c-dv-tot',hd[1]); setF('c-dv-die',hd[2]); setF('c-dv-used',0); }
+  /* The legacy seed never wrote proficiencies, so restore Vaelin's here. */
+  var profs={
+    saves:{ cos:{p:1,extra:0}, sag:{p:1,extra:0} },
+    skills:{
+      'Furtività':{p:0,e:0,armor:1,wis:0,extra:0},
+      'Arcano':{p:1,e:0,armor:0,wis:1,extra:0},
+      'Religione':{p:1,e:0,armor:0,wis:1,extra:0},
+      'Storia':{p:1,e:0,armor:0,wis:0,extra:0},
+      'Intuizione':{p:1,e:0,armor:0,wis:0,extra:0}
+    }
+  };
+  try{ localStorage.setItem('vaelin_prof_v2',JSON.stringify(profs)); }catch(e){}
+}
+function setupSettings(){
+  var open=$('btn-settings'), close=$('modal-close'), m=$('modal-settings');
+  if(open) open.addEventListener('click',function(){ openSettings(false); });
+  if(close) close.addEventListener('click',closeSettings);
+  if(m) m.addEventListener('click',function(e){ if(e.target===m) closeSettings(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeSettings(); });
+  var ex=$('btn-export'), im=$('btn-import'), fi=$('file-import');
+  if(ex) ex.addEventListener('click',exportJSON);
+  if(im) im.addEventListener('click',function(){ if(fi) fi.click(); });
+  if(fi) fi.addEventListener('change',function(e){ if(e.target.files && e.target.files[0]) importJSON(e.target.files[0]); e.target.value=''; });
+  var preset=$('btn-load-preset'), clear=$('btn-clear-sheet');
+  if(preset) preset.addEventListener('click',function(){
+    if(!window.confirm('Caricare il preset Vaelin? I dati attuali della scheda verranno sostituiti.')) return;
+    clearAllSheetData();
+    seedIfEmpty();
+    hydrateVaelinLegacy();
+    location.reload();
+  });
+  if(clear) clear.addEventListener('click',function(){
+    if(!window.confirm('Svuotare la scheda? Tutti i dati locali (personaggio, incantesimi, equipaggiamento) verranno cancellati.')) return;
+    clearAllSheetData();
+    location.reload();
+  });
+}
+
+/* ============ PWA ============ */
+var deferredPrompt=null;
+function makeIcon(size){
+  var c=document.createElement('canvas'); c.width=c.height=size;
+  var x=c.getContext('2d');
+  x.fillStyle='#1e1b18'; x.fillRect(0,0,size,size);
+  x.strokeStyle='#b8860b'; x.lineWidth=Math.max(2,size*0.035);
+  x.strokeRect(size*0.07,size*0.07,size*0.86,size*0.86);
+  x.fillStyle='#b8860b';
+  x.font='bold '+Math.round(size*0.5)+'px Georgia, serif';
+  x.textAlign='center'; x.textBaseline='middle';
+  x.fillText('?',size/2,size*0.53);
+  return c.toDataURL('image/png');
+}
+function setupPWA(){
+  try{
+    var icon=makeIcon(512);
+    var manifest={
+      name:'Scheda D&D 5e', short_name:'D&D',
+      description:'Scheda D&D 5e mobile-first, modificabile e sincronizzabile.',
+      start_url:'.', scope:'.', display:'standalone', orientation:'portrait',
+      background_color:'#f4efe6', theme_color:'#1e1b18',
+      icons:[{src:icon,sizes:'512x512',type:'image/png',purpose:'any maskable'}]
+    };
+    var blob=new Blob([JSON.stringify(manifest)],{type:'application/manifest+json'});
+    var link=document.createElement('link'); link.rel='manifest'; link.href=URL.createObjectURL(blob);
+    document.head.appendChild(link);
+    var apple=document.createElement('link'); apple.rel='apple-touch-icon'; apple.href=icon;
+    document.head.appendChild(apple);
+  }catch(e){}
+  window.addEventListener('beforeinstallprompt',function(e){
+    e.preventDefault(); deferredPrompt=e;
+    var b=$('btn-install'); if(b){ b.disabled=false; b.textContent='Installa sul dispositivo'; }
+  });
+  var b=$('btn-install');
+  if(b) b.addEventListener('click',function(){
+    if(!deferredPrompt){ toast('Usa il menu del browser: “Installa app” o “Aggiungi alla schermata Home”'); return; }
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(function(){ deferredPrompt=null; b.disabled=true; });
+  });
+  if(window.matchMedia && window.matchMedia('(display-mode: standalone)').matches){
+    var h=$('install-hint'); if(h) h.textContent='L’app è già installata e funziona a schermo intero.';
+  }
+}
+
+/* ============ boot ============ */
+function boot(){
+  loadProfs();
+  migrate();
+  loadCloud();
+  renderAbilities();
+  bindSimpleFields();
+  renderProfChips();
+  renderBuffs();
+  renderAmmo();
+  makeEntryList('list-armor','armor',{countId:'cnt-armor',addLabel:'protezione',namePlaceholder:'Nome protezione',ca:true,meta:true,resource:true,metaPlaceholder:'Proprietà / note',descPlaceholder:'Proprietà magiche complete...'});
+  makeEntryList('list-weapons','weapons',{countId:'cnt-weapons',addLabel:'arma',namePlaceholder:'Nome arma',fields:[{key:'atk',label:'Attacco',width:58},{key:'dmg',label:'Danno / tipo',width:110},{key:'range',label:'Gittata',width:62},{key:'weight',label:'Peso',width:58}]});
+  makeEntryList('list-classfeat','classfeat',{countId:'cnt-classfeat',addLabel:'privilegio',namePlaceholder:'Nome privilegio',meta:true,resource:true,metaPlaceholder:'Livello / note rapide'});
+  makeEntryList('list-racetraits','racetraits',{countId:'cnt-racetraits',addLabel:'tratto',namePlaceholder:'Nome tratto',meta:true,resource:true,metaPlaceholder:'Note rapide'});
+  makeEntryList('list-feats','feats',{countId:'cnt-feats',addLabel:'talento',namePlaceholder:'Nome talento',meta:true,resource:true,metaPlaceholder:'Note rapide'});
+  makeEntryList('list-perks','perks',{countId:'cnt-perks',addLabel:'voce',namePlaceholder:'Nome privilegio / oggetto',meta:true,resource:true,metaPlaceholder:'Note rapide'});
+  makeEntryList('list-langs','langs',{countId:'cnt-langs',addLabel:'lingua',namePlaceholder:'Lingua'});
+  renderInventory();
+  renderLoans();
+  renderSlotTracker();
+  ['0','1','2','3','4','5','6','7','8','9'].forEach(function(lv){ makeSpellList(lv,'list-sp'+lv); });
+  renderHitDice();
+  renderPortrait();
+  updateComputed();
+  setupTabs();
+  setupSpellFilters();
+  setupRest();
+  setupPortrait();
+  setupTheme();
+  setupTopbarSync();
+  setupBigStatInputs();
+  setupSettings();
+  setupCloud();
+  setupPWA();
+  BOOTING=false;
+  updateLocalTs();
+  window.addEventListener('resize',function(){ updateTopbar(); setSync(lastSyncState,lastSyncText); });
+  pullCloud(false);
+}
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot);
+else boot();
+})();
+
+</script>
+</body>
+</html>
