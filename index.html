@@ -178,8 +178,8 @@ main{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:12px 12p
 /* ---------- generic fields ---------- */
 label.fld{display:flex;flex-direction:column;justify-content:space-between;gap:4px;min-width:0;height:100%}
 label.fld>span, .flabel{
-  font-size:10px;line-height:1.2;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  font-size:10px;line-height:1.25;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+  white-space:normal;overflow:visible;text-overflow:clip;
 }
 input:where(:not([type=checkbox]):not([type=radio]):not([type=file])), select, textarea{
   width:100%;min-width:0;height:36px;padding:6px 10px;font-size:14px;border-radius:4px;
@@ -188,6 +188,10 @@ input:where(:not([type=checkbox]):not([type=radio]):not([type=file])), select, t
 }
 input:focus,select:focus,textarea:focus{border-color:var(--gold);box-shadow:0 0 0 2px color-mix(in srgb,var(--gold) 25%,transparent)}
 textarea{height:auto;resize:vertical;min-height:34px;line-height:1.4}
+textarea.autogrow{
+  overflow:hidden;resize:none;white-space:pre-wrap;word-break:break-word;
+  height:auto;min-height:32px;line-height:1.35;
+}
 input[type=checkbox]{accent-color:var(--crimson);width:15px;height:15px;margin:0;flex:0 0 auto}
 .field-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:9px}
 .field-grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -365,10 +369,11 @@ input[type=checkbox]{accent-color:var(--crimson);width:15px;height:15px;margin:0
 .entry{border:1px solid color-mix(in srgb,var(--line) 50%,transparent);border-radius:4px;margin-bottom:7px;background:var(--input);overflow:hidden}
 .entry.is-used{opacity:.62}
 .entry-head{display:flex;align-items:center;gap:5px;padding:5px 6px;flex-wrap:wrap}
-.entry-head input.f-name{flex:1 1 180px;min-width:140px;height:30px;font-size:13.5px;font-weight:700;border-color:transparent;background:transparent;padding:4px 5px}
-.entry-head input.f-name:hover,.entry-head input.f-name:focus{background:var(--card);border-color:var(--line)}
+.entry-head textarea.f-name{flex:1 1 180px;min-width:0;width:100%;min-height:32px;font-size:13.5px;font-weight:700;line-height:1.3;border-color:transparent;background:transparent;padding:5px 5px}
+.entry-head textarea.f-name:hover,.entry-head textarea.f-name:focus{background:var(--card);border-color:var(--line)}
 .entry-head textarea.f-meta{flex:2 1 220px;min-height:30px;font-size:12px;padding:4px 5px;background:transparent;border-color:transparent}
 .entry-head textarea.f-meta:hover,.entry-head textarea.f-meta:focus{background:var(--card);border-color:var(--line)}
+.entry-tools{display:flex;align-items:center;gap:5px;flex-wrap:wrap;flex:1 1 auto;min-width:0}
 .entry-head .icon-btn{width:24px;height:24px;background:transparent;color:var(--muted);border-color:transparent;font-size:15px}
 .entry-head .icon-btn:hover{background:var(--gold-soft);color:var(--ink)}
 .entry-head .icon-btn.del:hover{background:var(--crimson-soft);color:var(--crimson)}
@@ -412,7 +417,7 @@ input[type=checkbox]{accent-color:var(--crimson);width:15px;height:15px;margin:0
 .slot-row .cnt{font-size:10px;color:var(--muted);white-space:nowrap}
 .spell{border:1px solid color-mix(in srgb,var(--line) 50%,transparent);border-radius:4px;margin-bottom:6px;background:var(--input);overflow:hidden}
 .spell-head{display:flex;align-items:center;gap:5px;padding:5px 6px;flex-wrap:wrap}
-.spell-head .sname{flex:1 1 140px;min-width:0;font-weight:700;font-size:13px;padding:3px 4px;border:1px solid transparent;background:transparent}
+.spell-head .sname{flex:1 1 140px;min-width:0;width:100%;min-height:32px;font-weight:700;font-size:13px;line-height:1.3;padding:5px 4px;border:1px solid transparent;background:transparent}
 .spell-head .sname:hover,.spell-head .sname:focus{background:var(--card);border-color:var(--line)}
 .badges{display:flex;gap:3px;flex-wrap:wrap;align-items:center}
 .badge{
@@ -440,8 +445,8 @@ input[type=checkbox]{accent-color:var(--crimson);width:15px;height:15px;margin:0
 }
 .inv-row{border:1px solid color-mix(in srgb,var(--line) 45%,transparent);border-radius:4px;background:var(--input);margin-bottom:7px;overflow:hidden}
 .inv-main{display:grid;grid-template-columns:minmax(0,1fr) 96px 46px 60px 26px 26px;gap:5px;align-items:center;padding:5px 6px}
-.inv-main input,.inv-main select{font-size:11.5px;padding:4px 5px;height:34px}
-.inv-main .nm{font-weight:700}
+.inv-main input,.inv-main select,.inv-main textarea{font-size:11.5px;padding:4px 5px;height:34px}
+.inv-main textarea.nm{font-weight:700;height:auto;min-height:34px;line-height:1.3;padding:6px 5px}
 .inv-desc{padding:0 6px 6px}
 .inv-desc textarea{min-height:42px;font-size:12px;background:var(--card)}
 .icon-btn{border:1px solid transparent;background:transparent;color:var(--muted);border-radius:3px;display:grid;place-items:center;font-size:14px;line-height:1;padding:0}
@@ -518,6 +523,18 @@ input[type=checkbox]{accent-color:var(--crimson);width:15px;height:15px;margin:0
 .modal-section h3{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:7px}
 .modal-section .hint{margin-top:6px}
 .cloud-state{font-size:11px;padding:6px 8px;border-radius:4px;background:var(--input);border:1px solid color-mix(in srgb,var(--line) 35%,transparent)}
+.cloud-state .copy-id{
+  font-size:9.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;
+  padding:2px 7px;margin-left:4px;border-radius:20px;cursor:pointer;
+  background:var(--gold-soft);color:var(--ink);border:1px solid var(--gold);
+}
+.cloud-state .copy-id:hover{background:var(--gold);color:#231c07}
+.install-guide{
+  margin-top:8px;padding:9px 10px;border-radius:4px;font-size:11.5px;line-height:1.45;
+  background:var(--gold-soft);border:1px solid var(--gold);color:var(--ink);
+}
+.install-guide b{display:block;font-size:10px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px}
+.install-guide p{margin:0}
 
 /* ---------- bottom nav ---------- */
 .bottomnav{display:none}
@@ -570,11 +587,34 @@ input[type=checkbox]{accent-color:var(--crimson);width:15px;height:15px;margin:0
 @media(min-width:641px){#toast{bottom:20px}}
 @media(max-width:640px){
   input:where(:not([type=checkbox]):not([type=radio]):not([type=file])),select,textarea{font-size:16px}
-  .entry-head input.f-name,.entry-head textarea.f-meta{font-size:16px}
+  .entry-head textarea.f-name,.entry-head textarea.f-meta{font-size:16px}
   .entry-res select,.entry-res input.num{font-size:16px;height:34px}
   .entry-fields .mini input{font-size:16px;height:34px}
   .tog.extra input{font-size:16px;width:52px;height:22px}
   .inv-main input,.inv-main select{font-size:16px}
+}
+/* ---------- mobile readability: full-width fields, no truncated names ---------- */
+@media(max-width:640px){
+  .field-grid,.field-grid.two,.field-grid.three,.spell-toolbar{grid-template-columns:1fr}
+  label.fld>span,.flabel{white-space:normal;line-height:1.25;overflow:visible;text-overflow:clip}
+  .topbar{flex-wrap:wrap;align-items:center;gap:5px 8px}
+  .brand{flex:1 1 100%;width:100%;min-width:0}
+  .brand .who{width:100%;min-width:0}
+  .top-input-title{max-width:none;width:100%;font-size:16px}
+  .sub-line{max-width:none;width:100%}
+  .top-input-sub{max-width:none;font-size:16px}
+  #top-livello{width:44px}
+  #top-classe{flex:1 1 auto;width:auto;min-width:0}
+  .topbar-actions{flex:1 1 100%;width:100%;justify-content:space-between}
+  .entry-head textarea.f-name,.spell-head textarea.sname{flex:1 1 calc(100% - 40px);width:calc(100% - 40px);font-size:16px}
+  .entry-head .entry-tools,.spell-head .entry-tools{flex:1 1 100%;width:100%}
+  .entry-head textarea.f-meta{flex:1 1 100%;width:100%}
+  .entry-head .badges,.spell-head .badges{flex:1 1 auto}
+  .entry-head .pips{flex:1 1 auto}
+  .entry-fields{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .entry-fields .mini span{white-space:normal;overflow:visible;text-overflow:clip;line-height:1.2}
+  .inv-main textarea.nm{font-size:16px;min-height:40px}
+  .cloud-state .copy-id{font-size:11px;padding:4px 9px}
 }
 @media print{.topbar,.mainnav,.bottomnav,#toast,.modal-backdrop{display:none!important}main{padding:0}.card{box-shadow:none;break-inside:avoid}}
 </style>
@@ -1027,7 +1067,8 @@ input[type=checkbox]{accent-color:var(--crimson);width:15px;height:15px;margin:0
 
       <div class="modal-section">
         <h3>App installabile (PWA)</h3>
-        <div class="btn-row"><button class="btn" id="btn-install" disabled>Installa sul dispositivo</button></div>
+        <div class="btn-row"><button class="btn" id="btn-install">Installa sul dispositivo</button></div>
+        <div class="install-guide" id="install-guide-box" hidden></div>
         <div class="hint" id="install-hint">Apri la scheda da un indirizzo HTTPS (o localhost) per installarla come app a schermo intero.</div>
       </div>
 
@@ -1484,7 +1525,18 @@ var LIST_RENDERERS = {};
 function autoGrow(el){
   if(!el) return;
   el.style.height = 'auto';
-  el.style.height = Math.max(28,el.scrollHeight) + 'px';
+  el.style.height = Math.max(32,el.scrollHeight + 2) + 'px';
+}
+function setupAutoGrow(){
+  function growAll(){
+    document.querySelectorAll('textarea.autogrow').forEach(function(ta){ autoGrow(ta); });
+  }
+  document.addEventListener('input',function(e){
+    var t=e.target;
+    if(t && t.tagName==='TEXTAREA' && t.classList && t.classList.contains('autogrow')) autoGrow(t);
+  });
+  window.addEventListener('resize',growAll);
+  growAll();
 }
 function renderPips(container, it, onChange){
   container.innerHTML = '';
@@ -1543,6 +1595,8 @@ function makeEntryList(containerId, storKey, opts){
     entry.className = 'entry' + (it.used ? ' is-used' : '');
     var head = document.createElement('div');
     head.className = 'entry-head';
+    var tools = document.createElement('div');
+    tools.className = 'entry-tools';
 
     if(opts.used){
       var used = document.createElement('input');
@@ -1551,10 +1605,10 @@ function makeEntryList(containerId, storKey, opts){
       head.appendChild(used);
     }
 
-    var name = document.createElement('input');
-    name.type='text'; name.className='f-name'; name.placeholder=opts.namePlaceholder||'Nome';
+    var name = document.createElement('textarea');
+    name.rows=1; name.className='f-name autogrow'; name.placeholder=opts.namePlaceholder||'Nome';
     name.value = it.name||'';
-    name.addEventListener('input',function(){ it.name=name.value; persist(); });
+    name.addEventListener('input',function(){ it.name=name.value; autoGrow(name); persist(); });
     head.appendChild(name);
 
     if(opts.ca){
@@ -1563,7 +1617,7 @@ function makeEntryList(containerId, storKey, opts){
       ca.title='Valore CA della protezione'; ca.setAttribute('aria-label','Valore CA');
       ca.style.cssText='flex:0 0 48px;width:48px;text-align:center;padding:4px 3px;font-size:11px';
       ca.addEventListener('input',function(){ it.ca=int(ca.value,0); persist(); });
-      head.appendChild(ca);
+      tools.appendChild(ca);
     }
 
     if(opts.meta){
@@ -1571,7 +1625,7 @@ function makeEntryList(containerId, storKey, opts){
       meta.rows=1; meta.className='f-meta autogrow'; meta.placeholder=opts.metaPlaceholder||'Note rapide';
       meta.value = it.meta||'';
       meta.addEventListener('input',function(){ it.meta=meta.value; autoGrow(meta); persist(); });
-      head.appendChild(meta);
+      tools.appendChild(meta);
     }
 
     var fieldsWrap = null;
@@ -1595,7 +1649,7 @@ function makeEntryList(containerId, storKey, opts){
     if(opts.resource){
       pips = document.createElement('div');
       pips.className = 'pips';
-      head.appendChild(pips);
+      tools.appendChild(pips);
       var refreshPips = function(){
         renderPips(pips,it,function(){ persist(); refreshPips(); });
       };
@@ -1611,18 +1665,19 @@ function makeEntryList(containerId, storKey, opts){
         prep.title = it.prepared?'Preparato: tocca per rimuovere':'Tocca per segnare come preparato';
         persist(); applySpellFilter();
       });
-      head.appendChild(prep);
+      tools.appendChild(prep);
     }
 
     var toggle = document.createElement('button');
     toggle.type='button'; toggle.className='icon-btn f-toggle'; toggle.textContent = it._open?'▾':'▸';
     toggle.title='Espandi descrizione'; toggle.setAttribute('aria-label','Espandi descrizione');
-    head.appendChild(toggle);
+    tools.appendChild(toggle);
 
     var del = document.createElement('button');
     del.type='button'; del.className='icon-btn del'; del.textContent='×'; del.title='Rimuovi'; del.setAttribute('aria-label','Rimuovi');
     del.addEventListener('click',function(){ items.splice(i,1); persist(); render(); });
-    head.appendChild(del);
+    tools.appendChild(del);
+    head.appendChild(tools);
 
     entry.appendChild(head);
     if(fieldsWrap) entry.appendChild(fieldsWrap);
@@ -1711,16 +1766,18 @@ function renderAmmo(){
   items.forEach(function(it,i){
     var row=document.createElement('div'); row.className='entry'; row.style.marginBottom='5px';
     var head=document.createElement('div'); head.className='entry-head';
-    var nm=document.createElement('input'); nm.type='text'; nm.className='f-name'; nm.value=it.name||''; nm.placeholder='Munizione / consumabile';
-    nm.addEventListener('input',function(){ it.name=nm.value; persist(); });
+    var tools=document.createElement('div'); tools.className='entry-tools';
+    var nm=document.createElement('textarea'); nm.rows=1; nm.className='f-name autogrow'; nm.value=it.name||''; nm.placeholder='Munizione / consumabile';
+    nm.addEventListener('input',function(){ it.name=nm.value; autoGrow(nm); persist(); });
     head.appendChild(nm);
-    var pips=document.createElement('div'); pips.className='pips'; head.appendChild(pips);
+    var pips=document.createElement('div'); pips.className='pips'; tools.appendChild(pips);
     var mx=document.createElement('input'); mx.type='number'; mx.className='num'; mx.min='0'; mx.max='30';
     mx.value=it.max!==undefined?it.max:''; mx.placeholder='max'; mx.title='Quantità massima';
     mx.style.cssText='width:42px;text-align:center;font-size:10px;padding:2px 3px';
-    head.appendChild(mx);
+    tools.appendChild(mx);
     var del=document.createElement('button'); del.type='button'; del.className='icon-btn del'; del.textContent='×'; del.title='Rimuovi';
-    head.appendChild(del);
+    tools.appendChild(del);
+    head.appendChild(tools);
     row.appendChild(head);
     host.appendChild(row);
     function refresh(){ renderPips(pips,it,function(){ it.used=Math.min(int(it.used,0),int(it.max,0)); persist(); refresh(); }); }
@@ -1885,8 +1942,8 @@ function renderInventory(){
     items.forEach(function(it,i){
       var row=document.createElement('div'); row.className='inv-row';
       var main=document.createElement('div'); main.className='inv-main';
-      var nm=document.createElement('input'); nm.type='text'; nm.className='nm'; nm.value=it.name||''; nm.placeholder='Nome oggetto';
-      nm.addEventListener('input',function(){ it.name=nm.value; persist(); });
+      var nm=document.createElement('textarea'); nm.rows=1; nm.className='nm autogrow'; nm.value=it.name||''; nm.placeholder='Nome oggetto';
+      nm.addEventListener('input',function(){ it.name=nm.value; autoGrow(nm); persist(); });
       main.appendChild(nm);
       var pos=document.createElement('select'); pos.className='pos'; pos.title='Posizione';
       [['I','I · Indoss.'],['Z','Z · Zaino'],['T','T · Tasca'],['Altro','Altro']].forEach(function(o){
@@ -2064,26 +2121,28 @@ function makeSpellList(level, containerId){
       el.setAttribute('data-conc',conc?'1':'0');
       el.setAttribute('data-bonus',bonus?'1':'0');
       var head=document.createElement('div'); head.className='spell-head';
+      var tools=document.createElement('div'); tools.className='entry-tools';
       var used=document.createElement('input'); used.type='checkbox'; used.checked=!!it.used; used.title='Lanciato / usato';
       used.addEventListener('change',function(){ it.used=used.checked; el.classList.toggle('used',used.checked); persist(); });
       head.appendChild(used);
-      var nm=document.createElement('input'); nm.type='text'; nm.className='sname'; nm.value=it.name||''; nm.placeholder='Nome incantesimo';
-      nm.addEventListener('input',function(){ it.name=nm.value; persist(); });
+      var nm=document.createElement('textarea'); nm.rows=1; nm.className='sname autogrow'; nm.value=it.name||''; nm.placeholder='Nome incantesimo';
+      nm.addEventListener('input',function(){ it.name=nm.value; autoGrow(nm); persist(); });
       head.appendChild(nm);
       var badges=document.createElement('span'); badges.className='badges';
       spellBadges(it).forEach(function(b){ var s=document.createElement('span'); s.className='badge '+(b[1]||''); s.textContent=b[0]; badges.appendChild(s); });
-      head.appendChild(badges);
+      tools.appendChild(badges);
       var prep=document.createElement('button'); prep.type='button'; prep.className='prep-chip'+(it.prepared?' on':''); prep.textContent='Prep';
       prep.title = it.prepared?'Preparato: tocca per rimuovere':'Tocca per segnare come preparato';
       prep.addEventListener('click',function(){ it.prepared=!it.prepared; prep.classList.toggle('on',!!it.prepared); prep.title=it.prepared?'Preparato: tocca per rimuovere':'Tocca per segnare come preparato'; persist(); });
-      head.appendChild(prep);
+      tools.appendChild(prep);
       var tog=document.createElement('button'); tog.type='button'; tog.className='icon-btn'; tog.textContent=it._open?'▾':'▸'; tog.title='Testo completo';
       tog.style.cssText='width:24px;height:24px;padding:0;background:transparent;border-color:transparent;color:var(--muted)';
-      head.appendChild(tog);
+      tools.appendChild(tog);
       var del=document.createElement('button'); del.type='button'; del.className='icon-btn del'; del.textContent='×'; del.title='Rimuovi';
       del.style.cssText='width:24px;height:24px;padding:0;background:transparent;border-color:transparent;color:var(--muted)';
       del.addEventListener('click',function(){ items.splice(i,1); persist(); render(); });
-      head.appendChild(del);
+      tools.appendChild(del);
+      head.appendChild(tools);
       el.appendChild(head);
       var body=document.createElement('div'); body.className='spell-body'; body.hidden=!it._open;
       var ta=document.createElement('textarea'); ta.value=it.desc||''; ta.placeholder='Descrizione completa dell\'incantesimo...';
@@ -2531,6 +2590,7 @@ function loadCloud(){
   CLOUD.last=LS.get('vaelin_cloud_ts','')||'';
 }
 function cloudConfigured(){ return !!(CLOUD.token && CLOUD.gist); }
+function hasToken(){ return !!(CLOUD.token && CLOUD.token.trim()); }
 var lastSyncState='off', lastSyncText='Locale';
 function setSync(state,text){
   lastSyncState=state; lastSyncText=text;
@@ -2563,17 +2623,41 @@ function updateCloudState(msg){
   var el=$('cloud-state'); if(!el) return;
   var gi=$('cloud-gist'); if(gi && !gi.value && CLOUD.gist) gi.value=CLOUD.gist;
   var ti=$('cloud-token'); if(ti && !ti.value && CLOUD.token) ti.value=CLOUD.token;
-  if(!cloudConfigured()){
+  if(!hasToken()){
     el.textContent='Cloud non configurato: i dati restano solo su questo dispositivo.';
     return;
   }
+  if(!CLOUD.gist){
+    el.innerHTML='Token salvato. Premi «Salva e collega» per creare un nuovo Gist segreto.';
+    return;
+  }
   var last=CLOUD.last?new Date(CLOUD.last).toLocaleString('it-IT'):'mai';
-  el.innerHTML='Gist: <b>'+esc(CLOUD.gist)+'</b> · Ultimo sync: '+esc(last)+(msg?(' · '+esc(msg)):'');
+  el.innerHTML='Gist: <b>'+esc(CLOUD.gist)+'</b> <button type="button" class="copy-id" id="btn-copy-gist" title="Copia l\'ID del Gist">Copia ID</button><br>Ultimo sync: '+esc(last)+(msg?(' · '+esc(msg)):'');
+  var cp=$('btn-copy-gist');
+  if(cp) cp.addEventListener('click',copyGistId);
+}
+function copyGistId(){
+  var id=CLOUD.gist||'';
+  if(!id){ toast('Nessun Gist ID da copiare'); return; }
+  function done(){ toast('Gist ID copiato: '+id); }
+  function fallback(){
+    try{
+      var ta=document.createElement('textarea');
+      ta.value=id; ta.style.cssText='position:fixed;left:-9999px;top:0';
+      document.body.appendChild(ta); ta.select();
+      var ok=document.execCommand('copy');
+      document.body.removeChild(ta);
+      if(ok) done(); else window.prompt('Copia manualmente l\'ID del Gist:',id);
+    }catch(e){ window.prompt('Copia manualmente l\'ID del Gist:',id); }
+  }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(id).then(done).catch(fallback);
+  } else fallback();
 }
 function onDirty(){
   LS.rawSet('vaelin_local_ts',new Date().toISOString());
   updateLocalTs();
-  if(!cloudConfigured()){ setSync('off','Locale'); return; }
+  if(!hasToken()){ setSync('off','Locale'); return; }
   setSync('saving','Salvataggio...');
   clearTimeout(dirtyTimer);
   dirtyTimer=setTimeout(function(){ pushCloud(); },1500);
@@ -2597,7 +2681,7 @@ function applyBackup(obj){
   suppressDirty=false;
 }
 function pushCloud(){
-  if(!cloudConfigured()){ setSync('off','Locale'); return; }
+  if(!hasToken()){ setSync('off','Locale'); return; }
   if(pushing){ pendingPush=true; return; }
   pushing=true;
   setSync('saving','Salvataggio...');
@@ -2615,15 +2699,17 @@ function pushCloud(){
     if(!r.ok) throw new Error('HTTP '+r.status);
     return r.json();
   }).then(function(j){
+    var created=false;
     if(!CLOUD.gist && j && j.id){
-      CLOUD.gist=j.id;
+      CLOUD.gist=j.id; created=true;
       LS.rawSet('vaelin_cloud_gist',CLOUD.gist);
       var gi=$('cloud-gist'); if(gi) gi.value=CLOUD.gist;
     }
     CLOUD.last=new Date().toISOString();
     LS.rawSet('vaelin_cloud_ts',CLOUD.last);
     setSync('ok','Sincronizzato ✓');
-    updateCloudState();
+    updateCloudState(created?'Nuovo Gist creato':'');
+    if(created) toast('Nuovo Gist creato: '+CLOUD.gist+' — usa «Copia ID»');
     pushing=false;
     if(pendingPush){ pendingPush=false; pushCloud(); }
   }).catch(function(err){
@@ -2633,7 +2719,11 @@ function pushCloud(){
   });
 }
 function pullCloud(thenPush){
-  if(!cloudConfigured()){ setSync('off','Locale'); return; }
+  if(!hasToken()){ setSync('off','Locale'); return; }
+  if(!CLOUD.gist){
+    if(thenPush) pushCloud();
+    return;
+  }
   setSync('saving','Controllo...');
   fetch('https://api.github.com/gists/'+encodeURIComponent(CLOUD.gist),{
     headers:{ 'Authorization':'token '+CLOUD.token, 'Accept':'application/vnd.github+json' }
@@ -2670,7 +2760,8 @@ function pullCloud(thenPush){
 }
 function setupCloud(){
   updateCloudState();
-  setSync(cloudConfigured()?'ok':'off',cloudConfigured()?'Cloud':'Locale');
+  var linked=cloudConfigured();
+  setSync(linked?'ok':'off', linked?'Cloud':(hasToken()?'Token ok':'Locale'));
   var save=$('btn-cloud-save'), sync=$('btn-cloud-sync'), off=$('btn-cloud-off'), open=$('btn-cloud');
   if(save) save.addEventListener('click',function(){
     var t=$('cloud-token'), g=$('cloud-gist');
@@ -2679,10 +2770,23 @@ function setupCloud(){
     if(!CLOUD.token){ toast('Inserisci il Personal Access Token'); return; }
     LS.rawSet('vaelin_cloud_token',CLOUD.token);
     LS.rawSet('vaelin_cloud_gist',CLOUD.gist);
-    if(!CLOUD.gist) toast('Creo un nuovo Gist segreto...');
-    pushCloud();
+    if(CLOUD.gist){
+      toast('Collegamento al Gist esistente...');
+      pullCloud(true);
+    } else {
+      toast('Creo un nuovo Gist segreto...');
+      pushCloud();
+    }
   });
-  if(sync) sync.addEventListener('click',function(){ pullCloud(true); });
+  if(sync) sync.addEventListener('click',function(){
+    var t=$('cloud-token'), g=$('cloud-gist');
+    if(t) CLOUD.token=t.value.trim();
+    if(g) CLOUD.gist=g.value.trim();
+    if(!hasToken()){ toast('Inserisci il Personal Access Token'); return; }
+    LS.rawSet('vaelin_cloud_token',CLOUD.token);
+    LS.rawSet('vaelin_cloud_gist',CLOUD.gist);
+    pullCloud(true);
+  });
   if(off) off.addEventListener('click',function(){
     if(!window.confirm('Disconnettere il cloud? I dati restano sul dispositivo.')) return;
     CLOUD={token:'',gist:'',last:''};
@@ -2805,34 +2909,63 @@ function makeIcon(size){
   return c.toDataURL('image/png');
 }
 function setupPWA(){
+  var icon='';
+  try{ icon=makeIcon(512); }catch(e){}
   try{
-    var icon=makeIcon(512);
     var manifest={
       name:'Scheda D&D 5e', short_name:'D&D',
       description:'Scheda D&D 5e mobile-first, modificabile e sincronizzabile.',
-      start_url:'.', scope:'.', display:'standalone', orientation:'portrait',
+      start_url:location.href,
+      scope:location.href.replace(/[^/]*$/,''),
+      display:'standalone', orientation:'portrait',
       background_color:'#f4efe6', theme_color:'#1e1b18',
-      icons:[{src:icon,sizes:'512x512',type:'image/png',purpose:'any maskable'}]
+      icons: icon ? [{src:icon,sizes:'512x512',type:'image/png',purpose:'any maskable'}] : []
     };
-    var blob=new Blob([JSON.stringify(manifest)],{type:'application/manifest+json'});
-    var link=document.createElement('link'); link.rel='manifest'; link.href=URL.createObjectURL(blob);
+    var json=JSON.stringify(manifest);
+    var b64;
+    try{ b64=btoa(unescape(encodeURIComponent(json))); }catch(e){ b64=btoa(json); }
+    var link=document.createElement('link'); link.rel='manifest';
+    link.href='data:application/manifest+json;base64,'+b64;
     document.head.appendChild(link);
-    var apple=document.createElement('link'); apple.rel='apple-touch-icon'; apple.href=icon;
-    document.head.appendChild(apple);
+    if(icon){
+      var apple=document.createElement('link'); apple.rel='apple-touch-icon'; apple.href=icon;
+      document.head.appendChild(apple);
+    }
   }catch(e){}
   window.addEventListener('beforeinstallprompt',function(e){
     e.preventDefault(); deferredPrompt=e;
-    var b=$('btn-install'); if(b){ b.disabled=false; b.textContent='Installa sul dispositivo'; }
+    var b=$('btn-install'); if(b) b.textContent='Installa sul dispositivo';
   });
   var b=$('btn-install');
   if(b) b.addEventListener('click',function(){
-    if(!deferredPrompt){ toast('Usa il menu del browser: “Installa app” o “Aggiungi alla schermata Home”'); return; }
-    deferredPrompt.prompt();
-    deferredPrompt.userChoice.then(function(){ deferredPrompt=null; b.disabled=true; });
+    if(deferredPrompt){
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(function(){ deferredPrompt=null; });
+      return;
+    }
+    toggleInstallGuide();
   });
   if(window.matchMedia && window.matchMedia('(display-mode: standalone)').matches){
     var h=$('install-hint'); if(h) h.textContent='L’app è già installata e funziona a schermo intero.';
   }
+}
+function toggleInstallGuide(){
+  var box=$('install-guide-box'); if(!box) return;
+  if(!box.hidden){ box.hidden=true; return; }
+  var ua=navigator.userAgent||'';
+  var isIOS=/iPad|iPhone|iPod/i.test(ua) || (navigator.platform==='MacIntel' && (navigator.maxTouchPoints||0)>1);
+  var isAndroid=/Android/i.test(ua);
+  var html;
+  if(isIOS){
+    html='<b>iPhone / iPad · Safari</b><p>Per installare l\'app: tocca l\'icona Condividi (quadrato con freccia in su) nella barra di Safari e seleziona «Aggiungi alla schermata Home».</p>';
+  } else if(isAndroid){
+    html='<b>Android · Chrome</b><p>Per installare l\'app: tocca i 3 puntini (⋮) in alto a destra nel browser Chrome e seleziona «Aggiungi a schermata Home» o «Installa app».</p>';
+  } else {
+    html='<b>Installazione</b><p>Apri il menu del browser e scegli «Installa app» o «Aggiungi alla schermata Home». Su desktop Chrome/Edge puoi usare l\'icona di installazione nella barra degli indirizzi.</p>';
+  }
+  box.innerHTML=html;
+  box.hidden=false;
+  toast(isIOS?'Segui i passaggi di Safari per installare l\'app':isAndroid?'Segui i passaggi di Chrome per installare l\'app':'Segui le istruzioni per installare l\'app');
 }
 
 /* ============ boot ============ */
@@ -2860,6 +2993,7 @@ function boot(){
   renderPortrait();
   updateComputed();
   setupTabs();
+  setupAutoGrow();
   setupSpellFilters();
   setupRest();
   setupPortrait();
